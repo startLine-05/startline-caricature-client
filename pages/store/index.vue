@@ -1,8 +1,5 @@
 <template>
-  <view>
-    演示页面首页在 pages_template/uni-id/index/index
-    <u-button text="月落" @click="init"></u-button>
-  </view>
+  <view> 演示页面首页在 pages_template/uni-id/index/index </view>
 </template>
 
 <script>
