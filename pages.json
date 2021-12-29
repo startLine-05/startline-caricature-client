@@ -162,7 +162,7 @@
         "selectedIconPath": "static/tab/store-active.png"
       },
       {
-        "pagePath": "pages/test/test",
+        "pagePath": "pages/home/index",
         "text": "我的",
         "iconPath": "static/tab/me.png",
         "selectedIconPath": "static/tab/me-active.png"
