@@ -1,5 +1,5 @@
 <template>
-  <view> 演示页面首页在 pages_template/uni-id/index/index </view>
+  <view> 演示页面首页在 pages_template/uni-id/index/indexs </view>
 </template>
 
 <script>
@@ -24,7 +24,7 @@ export default {
     that = this;
     vk = that.vk;
     that.options = options;
-    // that.init(options);
+    that.init(options);
   },
   // 监听 - 页面【首次渲染完成时】执行。注意如果渲染速度快，会在页面进入动画完成前触发
   onReady() {},
@@ -44,7 +44,16 @@ export default {
   methods: {
     // 页面数据初始化函数
     init(options) {
-      vk.reLaunch("/pages_template/uni-id/index/index");
+      // promise方式
+      vk.callFunction({
+      	url: "client/caricature/kh/getStoreCaricature",
+      	title: "请求中...",
+      	data: {
+      	},
+      }).then((res) => {
+      	console.log(res, "s");
+      	this.list = res.rows;
+      });
     },
     pageTo(path) {
       vk.navigateTo(path);
