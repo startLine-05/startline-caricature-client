@@ -1,61 +1,103 @@
 <template>
   <view>
-    <u-button text="登录" @click="init"></u-button>
+    <u-row justify="space-between" gutter="10">
+      <u-col span="4">
+        <u-avatar :src="vk.getVuex('$user.userInfo.avatar') || '/static/default.png'" size="50"></u-avatar>
+      </u-col>
+
+      <u-col span="4" class="u-f-ac">
+        <view>
+          <text>{{ vk.getVuex("$user.userInfo.nickname") }} · 置业顾问</text>
+          <u-icon name="/static/gs.png" size="25" style="margin-left: 10rpx"></u-icon>
+        </view>
+        <view class="">{{ 22 }}</view>
+      </u-col>
+
+      <u-col span="2">
+        <u-icon name="arrow-right" color="#969799" size="28"></u-icon>
+      </u-col>
+    </u-row>
+
+    <u-gap height="10" bgColor="#ededed"></u-gap>
+
+    <view>
+      <u-cell-group>
+        <block v-for="(item, index) in list" :key="item.id">
+          <u-cell icon-size="38" :icon="item.icon" :icon-style="{ color: item.color }" :title="item.text" @click="handle(index)"></u-cell>
+        </block>
+      </u-cell-group>
+    </view>
   </view>
 </template>
 
 <script>
-var that; // 当前页面对象
-var vk; // vk依赖
 export default {
   data() {
-    // 页面数据变量
-    return {
-      // init请求返回的数据
-      data: {},
-      // 表单请求数据
-      form1: {},
-      scrollTop: 0,
-    };
+    return {};
   },
-  onPageScroll(e) {
-    that.scrollTop = e.scrollTop;
+  computed: {
+    list: function () {
+      //前往的功能模块
+      return [
+        {
+          id: 1,
+          text: "绑定推送",
+          icon: "attach",
+          url: "/pagesB/bindPush/index",
+          color: "#6a6266",
+        },
+        {
+          id: 2,
+          text: "我的收藏",
+          icon: "star-fill",
+          url: "/pagesB/myStar/index",
+          color: "#dc4c3f",
+        },
+        {
+          id: 5,
+          text: "声纹采集",
+          icon: "fingerprint",
+          url: "/pagesB/collection/index",
+          color: "#272822",
+        },
+        {
+          id: 6,
+          text: "工牌绑定",
+          icon: "mic",
+          url: "/pagesB/BLE/index",
+          color: "#2d6de3",
+        },
+        {
+          id: 7,
+          text: "退出登录",
+          icon: "setting-fill",
+          url: "",
+          color: "#6a6266",
+        },
+      ];
+    },
   },
-  // 监听 - 页面每次【加载时】执行(如：前进)
-  onLoad(options = {}) {
-    that = this;
-    vk = that.vk;
-    that.options = options;
-    // that.init(options);
-  },
-  // 监听 - 页面【首次渲染完成时】执行。注意如果渲染速度快，会在页面进入动画完成前触发
-  onReady() {},
-  // 监听 - 页面每次【显示时】执行(如：前进和返回) (页面每次出现在屏幕上都触发，包括从下级页面点返回露出当前页面)
-  onShow() {},
-  // 监听 - 页面每次【隐藏时】执行(如：返回)
-  onHide() {},
-  // 监听 - 页面触底部
-  onReachBottom() {},
-  // 监听 - 窗口尺寸变化(仅限:App、微信小程序)
-  onResize() {},
-  // 监听 - 点击右上角转发时
-  onShareAppMessage(options) {},
-  // 监听 - 页面创建时
-  created() {},
-  // 函数
   methods: {
-    // 页面数据初始化函数
-    init(options) {
-      vk.reLaunch("/pages/login/index");
+    toLogin() {
+      uni.navigateTo({
+        url: "/pages/login/index",
+      });
     },
-    pageTo(path) {
-      vk.navigateTo(path);
+    handle(index) {
+      // console.log(index)
+      //路由跳转
+      if (this.list[index].id < 6) {
+        uni.navigateTo({
+          url: `${this.list[index].url}`,
+        });
+      }
     },
   },
-  // 过滤器
-  filters: {},
-  // 计算属性
-  computed: {},
 };
 </script>
-<style lang="less" scoped></style>
+
+<style lang="scss">
+pages {
+  background: #ededed;
+}
+</style>
