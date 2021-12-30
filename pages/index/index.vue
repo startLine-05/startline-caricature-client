@@ -1,22 +1,25 @@
 <template>
   <view>
-    演示页面首页在 pages_template/uni-id/index/index
-    <u-button text="月落" @click="init"></u-button>
+    <view class="head"></view>
+    <view class="list u-f-ac">
+		<block v-for="item in list" :key="item._id">
+			<view class="card">
+				<u--image :showLoading="true" :src="item.avatar" width="80px" height="100px" ></u--image>
+			</view>
+		</block>
+    </view>
   </view>
 </template>
 
 <script>
 var that; // 当前页面对象
 var vk; // vk依赖
+
 export default {
   data() {
     // 页面数据变量
     return {
-      // init请求返回的数据
-      data: {},
-      // 表单请求数据
-      form1: {},
-      scrollTop: 0,
+      list: [],
     };
   },
   onPageScroll(e) {
@@ -27,7 +30,7 @@ export default {
     that = this;
     vk = that.vk;
     that.options = options;
-    // that.init(options);
+    that.init(options);
   },
   // 监听 - 页面【首次渲染完成时】执行。注意如果渲染速度快，会在页面进入动画完成前触发
   onReady() {},
@@ -37,17 +40,24 @@ export default {
   onHide() {},
   // 监听 - 页面触底部
   onReachBottom() {},
-  // 监听 - 窗口尺寸变化(仅限:App、微信小程序)
-  onResize() {},
-  // 监听 - 点击右上角转发时
-  onShareAppMessage(options) {},
   // 监听 - 页面创建时
   created() {},
   // 函数
   methods: {
     // 页面数据初始化函数
     init(options) {
-      vk.reLaunch("/pages_template/uni-id/index/index");
+      // promise方式
+      vk.callFunction({
+        url: "client/caricature/pub/getCaricatureList",
+        title: "请求中...",
+        data: {
+          pageIndex: 1,
+          pageSize: 10,
+        },
+      }).then((res) => {
+        console.log(res, "s");
+        this.list = res.rows;
+      });
     },
     pageTo(path) {
       vk.navigateTo(path);
@@ -59,4 +69,15 @@ export default {
   computed: {},
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="less" scoped>
+	.list{
+		padding: 20rpx;
+		.card {
+			margin-bottom: 35rpx;
+			border: 1rpx solid #bebebe;
+			border-radius: 15rpx;
+			box-shadow: 2rpx 2rpx 10rpx #e6e6e6;
+		}
+	}
+
+</style>
