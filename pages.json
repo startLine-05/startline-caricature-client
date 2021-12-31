@@ -9,6 +9,7 @@
     },
     {
       "path": "pages/store/index",
+      // "path": "components/comment/index",
       "style": {
         "navigationBarTitleText": "收藏"
       }
@@ -26,12 +27,19 @@
       }
     },
     {
+      "path": "pagesA/cartoonDetails/index",
+      "style": {
+        "navigationBarTitleText": "漫画详情"
+      }
+    },
+    {
       "path": "pages/test/test",
       "style": {
         "navigationBarTitleText": "演示页面"
       }
     }
   ],
+
   "subPackages": [
     {
       "root": "pages_template",
@@ -157,6 +165,7 @@
       },
       {
         "pagePath": "pages/store/index",
+        // "pagePath":"components/comment/index",
         "text": "我的书架",
         "iconPath": "static/tab/store.png",
         "selectedIconPath": "static/tab/store-active.png"

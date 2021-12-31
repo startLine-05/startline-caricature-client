@@ -12,7 +12,7 @@ import Vue from 'vue'
 
 // 引入 uView UI
 Vue.use(uView);
-
+uni.$u.config.unit = 'rpx'
 // 引入 vk框架前端
 Vue.use(vk);
 

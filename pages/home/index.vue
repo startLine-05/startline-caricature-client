@@ -86,11 +86,12 @@ export default {
     handle(index) {
       // console.log(index)
       //路由跳转
-      if (this.list[index].id < 6) {
-        uni.navigateTo({
-          url: `${this.list[index].url}`,
-        });
-      }
+      // if (this.list[index].id < 6) {
+      //   uni.navigateTo({
+      //     url: `${this.list[index].url}`,
+      //   });
+      // }
+	  uni.vk.navigateTo('/pages/login/index');
     },
   },
 };

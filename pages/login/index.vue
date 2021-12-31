@@ -25,6 +25,7 @@
       </view>
 
       <u-button class="btn" type="primary" @click="login">登录</u-button>
+	  <!-- <u-button class="btn" type="primary" @click="register">登录</u-button> -->
     </view>
     <u-toast ref="uToast" />
     <image class="bottom" src="@/static/loginbg.png" mode="widthFix"></image>
@@ -37,8 +38,8 @@ export default {
   data() {
     return {
       //13399908887 13399908889 经理13399958881 !QAZ2wsx 18933334445
-      username: "13399908887",
-      password: "!QAZ2wsx",
+      username: "qq430482",
+      password: "qq430482",
       passwordType: true,
     };
   },
