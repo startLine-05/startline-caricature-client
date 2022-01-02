@@ -1,10 +1,24 @@
 <template>
   <view>
-    <u-button text="月落" @click="showList = true"></u-button>
-    <u-popup :show="showList" @close="showList = false">
-      <view>
-        <text>出淤泥而不染，濯清涟而不妖</text>
+    <view class="head">
+      <u--image :src="detailInfo.avatar" width="100%" mode="aspectFill"></u--image>
+    </view>
+    <view class="info">
+      <view class="name">
+        {{ detailInfo.name }}
       </view>
+      <view class="notability">
+        <text style="background: #c7c6c6"> 阅读数：22万 </text>
+      </view>
+      <view class="start">
+        {{ detailInfo.caricature_status == "0" ? "连载中" : "已完结" }}
+      </view>
+      <view class="other"></view>
+    </view>
+    <view class="com"> </view>
+    <!--目录-->
+    <u-popup :show="showList" @close="showList = false">
+      <view> </view>
     </u-popup>
   </view>
 </template>
@@ -50,4 +64,23 @@ export default {
   computed: {},
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="less" scoped>
+.head {
+  width: 100%;
+  height: 300rpx;
+  overflow: hidden;
+}
+.info {
+  padding: 20rpx;
+  .name {
+    font-size: 34rpx;
+    font-weight: bold;
+  }
+  .notability {
+    font-size: 24rpx;
+  }
+  .start {
+    font-size: 26rpx;
+  }
+}
+</style>
