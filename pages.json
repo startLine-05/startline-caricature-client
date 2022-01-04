@@ -35,6 +35,14 @@
       }
     },
     {
+      "path": "pagesA/cartoonContent/index",
+      "style": {
+        "navigationBarTitleText": "漫画内容",
+        "navigationStyle": "custom",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
       "path": "pages/test/test",
       "style": {
         "navigationBarTitleText": "演示页面"

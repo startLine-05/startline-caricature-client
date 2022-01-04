@@ -52,11 +52,15 @@
       <view class="popup-content">
         <u-list>
           <u-list-item v-for="(item, index) in detailInfo.caricatureContentList" :key="index">
-            <view class="chapter u-f">
+            <view class="chapter u-f" @click="readDetail(item)">
               <u--image :src="detailInfo.avatar" width="200rpx" height="112rpx" radius="10rpx" mode="aspectFill"></u--image>
               <view class="chapter-info">
-                <view>{{ item.current_number }} {{ item.current_name }}</view>
-                <view>{{ item.create_date }}</view>
+                <view>
+                  <text style="color: #303133">{{ item.current_number }} </text>
+                  <text></text>
+                  <text>{{ item.current_name }} </text>
+                </view>
+                <view>{{ item.create_date | date("yyyy-mm-dd") }}</view>
               </view>
             </view>
           </u-list-item>
@@ -77,7 +81,7 @@ export default {
   },
   // 监听 - 页面每次【加载时】执行(如：前进)
   onLoad(options = {}) {
-    console.log(options, "ssss");
+    // console.log(options, "ssss");
     this.getCaricatureDetail(options.id);
   },
   // 函数
@@ -97,6 +101,10 @@ export default {
           console.log(res, "s");
         });
     },
+    readDetail(data) {
+      console.log(data);
+      uni.vk.navigateTo(`/pagesA/cartoonContent/index?id=${data._id}`);
+    },
     pageTo(path) {
       vk.navigateTo(path);
     },
@@ -115,6 +123,10 @@ export default {
 page {
   background: $u-bg-color;
   font-size: 24rpx;
+  letter-spacing: 3rpx;
+}
+text {
+  padding: 5rpx;
 }
 .head {
   width: 100%;
@@ -127,9 +139,7 @@ page {
   view {
     margin-bottom: 20rpx;
   }
-  text {
-    padding: 5rpx;
-  }
+
   .store {
     width: 110rpx;
     height: 90rpx;
@@ -172,16 +182,16 @@ page {
 }
 .popup-title {
   height: 100rpx;
-  padding: 10rpx;
+  padding: 20rpx 30rpx;
   font-size: 35rpx;
   font-weight: 510;
 }
 .popup-content {
   height: 500rpx;
+  font-size: 30rpx;
   .chapter {
     padding: 20rpx 30rpx;
     .chapter-info {
-      font-size: 30rpx;
       padding: 0 20rpx;
       color: #767a82;
       display: flex;
