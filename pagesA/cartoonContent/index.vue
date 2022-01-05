@@ -1,11 +1,8 @@
 <template>
   <view>
-    <u-list @scroll="scroll">
-      <u-list-item v-for="(item, index) in detailInfo.image_list" :key="index" :anchor="index">
+    <u-list @scroll="scroll" @scrolltolower="scrolltolower" ref="list">
+      <u-list-item v-for="(item, index) in contentList" :key="index" :anchor="index">
         <u--image :src="item" width="100%" mode="widthFix" @click="showPopup = true">
-          <template v-slot:loading>
-            <u-loading-icon color="red"></u-loading-icon>
-          </template>
         </u--image>
       </u-list-item>
     </u-list>
@@ -26,12 +23,16 @@
 </template>
 
 <script>
-var page = 3;
+var total = 0;
 export default {
   data() {
     // 页面数据变量
     return {
-      detailInfo: {},
+      detailInfo: {
+        image_list:[],
+      },
+      //要渲染的图片数组
+      contentList:[],
       showPopup: false,
     };
   },
@@ -60,7 +61,7 @@ export default {
       // console.log(data);
       this.showPopup && (this.showPopup = false);
     },
-    // 页面数据初始化函数
+    // 页面数据初始化函数获取漫画数据
     getCaricatureContent(id) {
       uni.vk
         .callFunction({
@@ -72,9 +73,21 @@ export default {
         })
         .then((res) => {
           this.detailInfo = res.data;
-          console.log(res, "s");
+          this.contentList = [...this.contentList, ...this.detailInfo.image_list.splice(total=+3,3)]
+          // this.$nextTick(()=>{
+          // 	this.$refs.list.refreshLsit()
+          // })
         });
     },
+      scrolltolower() {
+        this.loadmore()
+      },
+      loadmore() {
+        this.contentList = [...this.contentList, ...this.detailInfo.image_list.splice(total=+1,1)]
+          //         this.$nextTick(()=>{
+          // 	this.$refs.list.refreshLsit()
+          // })
+      }
   },
   // 过滤器
   filters: {},
