@@ -5,7 +5,16 @@
     </block>
     <u-popup :show="showPopup" @close="showPopup = false" mode="top" :overlay="false" bgColor="rgba(30, 30, 30, 0.7)">
       <view class="head u-f-ac">
-        <u-icon size="50rpx" name="arrow-left" color="#fff" label="22-11" labelPos="right" labelSize="40rpx" labelColor="#fff" space="50rpx"></u-icon>
+        <u-icon
+          size="50rpx"
+          name="arrow-left"
+          color="#fff"
+          :label="`${detailInfo.current_number}-${detailInfo.current_name}`"
+          labelPos="right"
+          labelSize="40rpx"
+          labelColor="#fff"
+          space="50rpx"
+        ></u-icon>
       </view>
     </u-popup>
     <u-popup :show="showPopup" @close="showPopup = false" :overlay="false" bgColor="rgba(30, 30, 30, 0.7)">
@@ -22,23 +31,46 @@
           labelColor="#fff"
           space="20rpx"
         ></u-icon>
-        <u-icon size="50rpx" name="arrow-left-double" color="#fff" label="上一章" labelPos="bottom" labelSize="24rpx" labelColor="#fff" space="20rpx"></u-icon>
-        <u-icon size="50rpx" name="arrow-right-double" color="#fff" label="下一章" labelPos="bottom" labelSize="24rpx" labelColor="#fff" space="20rpx"></u-icon>
+        <u-icon
+          size="50rpx"
+          name="arrow-left-double"
+          color="#fff"
+          label="上一章"
+          labelPos="bottom"
+          labelSize="24rpx"
+          @click="jump('last')"
+          labelColor="#fff"
+          space="20rpx"
+        ></u-icon>
+        <u-icon
+          size="50rpx"
+          name="arrow-right-double"
+          color="#fff"
+          label="下一章"
+          labelPos="bottom"
+          labelSize="24rpx"
+          @click="jump('next')"
+          labelColor="#fff"
+          space="20rpx"
+        ></u-icon>
       </view>
     </u-popup>
 
     <!--目录-->
     <u-popup :show="showList" @close="showList = false">
-      <view class="popup-title"> 全部章节 ({{ caricatureContentLength }}) </view>
+      <view class="popup-title">
+        全部章节
+        {{ location }}
+        <block v-if="cartoonDetails.caricatureContentList">({{ cartoonDetails.caricatureContentList.length }})</block>
+      </view>
       <view class="popup-content">
         <u-list>
           <u-list-item v-for="(item, index) in cartoonDetails.caricatureContentList" :key="index">
-            <view class="chapter u-f" @click="readDetail(item)">
+            <view class="chapter u-f" @click="choose(item)">
               <u--image :src="cartoonDetails.avatar" width="200rpx" height="112rpx" radius="10rpx" mode="aspectFill"></u--image>
               <view class="chapter-info">
-                <view>
-                  <text style="color: #303133">{{ item.current_number }} </text>
-                  <text></text>
+                <view :class="{ active: index == location }">
+                  <text>{{ item.current_number }} </text>
                   <text>{{ item.current_name }} </text>
                 </view>
                 <view>{{ item.create_date | date("yyyy-mm-dd") }}</view>
@@ -104,18 +136,54 @@ export default {
       const { image_list } = this.detailInfo;
       image_list.length >= 1 && this.contentList.push(image_list.shift());
     },
+    choose(data) {
+      console.log(data);
+      this.clearList();
+      this.getCaricatureContent(data._id);
+    },
+    jump(type) {
+      // console.log(type, this.cartoonDetails, this.isJump);
+      // if ((this.isJump === "first" && type == "last") || (this.isJump === "last" && type == "next")) {
+      //   return;
+      // }
+      const { caricatureContentList } = this.cartoonDetails;
+      const { _id } = this.detailInfo;
+
+      let index = caricatureContentList.findIndex((v) => v._id == _id);
+
+      console.log(index);
+    },
+    clearList() {
+      this.contentList = [];
+      this.detailInfo = {
+        image_list: [],
+      };
+    },
   },
   // 过滤器
   filters: {},
   // 计算属性
   computed: {
-    caricatureContentLength() {
-      return this.cartoonDetails.caricatureContentList?.length;
+    //判断当前集数所在位置是否在最前或最后
+    location() {
+      const { caricatureContentList } = this.cartoonDetails;
+      const { _id } = this.detailInfo;
+      return caricatureContentList.findIndex((v) => v._id == _id);
+      // console.log("sssssss", index);
+      // let res = index === 0 ? "first" : index === caricatureContentList.length ? "last" : "";
     },
   },
 };
 </script>
 <style lang="scss">
+page {
+  background: $u-bg-color;
+  font-size: 24rpx;
+  letter-spacing: 3rpx;
+}
+text {
+  padding: 5rpx;
+}
 .head {
   height: 120rpx;
   padding: 0 20rpx;
@@ -149,6 +217,9 @@ export default {
       display: flex;
       justify-content: space-between;
       flex-direction: column;
+    }
+    .active {
+      color: #22afff !important;
     }
   }
 }
