@@ -1,11 +1,8 @@
 <template>
   <view>
-    <u-list @scroll="scroll" @scrolltolower="scrolltolower" ref="list">
-      <u-list-item v-for="(item, index) in contentList" :key="index" :anchor="index">
-        <u--image :src="item" width="100%" mode="widthFix" @click="showPopup = true">
-        </u--image>
-      </u-list-item>
-    </u-list>
+    <block v-for="(item, index) in contentList" :key="index">
+      <u--image :src="item" width="100%" bgColor="#616161" mode="widthFix" @click="showPopup = true"> </u--image>
+    </block>
     <u-popup :show="showPopup" @close="showPopup = false" mode="top" :overlay="false" bgColor="rgba(30, 30, 30, 0.7)">
       <view class="head u-f-ac">
         <u-icon size="50rpx" name="arrow-left" color="#fff" label="22-11" labelPos="right" labelSize="40rpx" labelColor="#fff" space="50rpx"></u-icon>
@@ -14,29 +11,64 @@
     <u-popup :show="showPopup" @close="showPopup = false" :overlay="false" bgColor="rgba(30, 30, 30, 0.7)">
       <view class="bottom u-f-ac">
         <u-icon size="50rpx" name="star-fill" color="#fff" label="追番" labelPos="bottom" labelSize="24rpx" labelColor="#fff" space="20rpx"></u-icon>
-        <u-icon size="50rpx" name="file-text" color="#fff" label="章节" labelPos="bottom" labelSize="24rpx" labelColor="#fff" space="20rpx"></u-icon>
+        <u-icon
+          size="50rpx"
+          name="file-text"
+          color="#fff"
+          label="章节"
+          labelPos="bottom"
+          labelSize="24rpx"
+          @click="showList = true"
+          labelColor="#fff"
+          space="20rpx"
+        ></u-icon>
         <u-icon size="50rpx" name="arrow-left-double" color="#fff" label="上一章" labelPos="bottom" labelSize="24rpx" labelColor="#fff" space="20rpx"></u-icon>
         <u-icon size="50rpx" name="arrow-right-double" color="#fff" label="下一章" labelPos="bottom" labelSize="24rpx" labelColor="#fff" space="20rpx"></u-icon>
+      </view>
+    </u-popup>
+
+    <!--目录-->
+    <u-popup :show="showList" @close="showList = false">
+      <view class="popup-title"> 全部章节 ({{ caricatureContentLength }}) </view>
+      <view class="popup-content">
+        <u-list>
+          <u-list-item v-for="(item, index) in cartoonDetails.caricatureContentList" :key="index">
+            <view class="chapter u-f" @click="readDetail(item)">
+              <u--image :src="cartoonDetails.avatar" width="200rpx" height="112rpx" radius="10rpx" mode="aspectFill"></u--image>
+              <view class="chapter-info">
+                <view>
+                  <text style="color: #303133">{{ item.current_number }} </text>
+                  <text></text>
+                  <text>{{ item.current_name }} </text>
+                </view>
+                <view>{{ item.create_date | date("yyyy-mm-dd") }}</view>
+              </view>
+            </view>
+          </u-list-item>
+        </u-list>
       </view>
     </u-popup>
   </view>
 </template>
 
 <script>
-var total = 0;
 export default {
   data() {
     // 页面数据变量
     return {
+      cartoonDetails: uni.getStorageSync("lifeData")?.$cartoon?.cartoonDetails || {},
       detailInfo: {
-        image_list:[],
+        image_list: [],
       },
       //要渲染的图片数组
-      contentList:[],
+      contentList: [],
       showPopup: false,
+      showList: false,
     };
   },
-  onPageScroll(e) {},
+  onPageScroll(e) {
+    this.showPopup && (this.showPopup = false);
+  },
   // 监听 - 页面每次【加载时】执行(如：前进)
   onLoad(options = {}) {
     this.getCaricatureContent(options.id);
@@ -48,19 +80,11 @@ export default {
   // 监听 - 页面每次【隐藏时】执行(如：返回)
   onHide() {},
   // 监听 - 页面触底部
-  onReachBottom() {},
-  // 监听 - 窗口尺寸变化(仅限:App、微信小程序)
-  onResize() {},
-  // 监听 - 点击右上角转发时
-  onShareAppMessage(options) {},
-  // 监听 - 页面创建时
-  created() {},
+  onReachBottom() {
+    this.loadmore();
+  },
   // 函数
   methods: {
-    scroll(data) {
-      // console.log(data);
-      this.showPopup && (this.showPopup = false);
-    },
     // 页面数据初始化函数获取漫画数据
     getCaricatureContent(id) {
       uni.vk
@@ -73,29 +97,25 @@ export default {
         })
         .then((res) => {
           this.detailInfo = res.data;
-          this.contentList = [...this.contentList, ...this.detailInfo.image_list.splice(total=+3,3)]
-          // this.$nextTick(()=>{
-          // 	this.$refs.list.refreshLsit()
-          // })
+          this.contentList = [...this.contentList, ...this.detailInfo.image_list.splice(0, 3)];
         });
     },
-      scrolltolower() {
-        this.loadmore()
-      },
-      loadmore() {
-        this.contentList = [...this.contentList, ...this.detailInfo.image_list.splice(total=+1,1)]
-          //         this.$nextTick(()=>{
-          // 	this.$refs.list.refreshLsit()
-          // })
-      }
+    loadmore() {
+      const { image_list } = this.detailInfo;
+      image_list.length >= 1 && this.contentList.push(image_list.shift());
+    },
   },
   // 过滤器
   filters: {},
   // 计算属性
-  computed: {},
+  computed: {
+    caricatureContentLength() {
+      return this.cartoonDetails.caricatureContentList?.length;
+    },
+  },
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .head {
   height: 120rpx;
   padding: 0 20rpx;
@@ -110,6 +130,26 @@ export default {
     justify-items: center;
     flex-direction: column;
     align-items: center;
+  }
+}
+.popup-title {
+  height: 100rpx;
+  padding: 20rpx 30rpx;
+  font-size: 35rpx;
+  font-weight: 510;
+}
+.popup-content {
+  height: 500rpx;
+  font-size: 30rpx;
+  .chapter {
+    padding: 20rpx 30rpx;
+    .chapter-info {
+      padding: 0 20rpx;
+      color: #767a82;
+      display: flex;
+      justify-content: space-between;
+      flex-direction: column;
+    }
   }
 }
 </style>

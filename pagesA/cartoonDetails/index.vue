@@ -98,7 +98,8 @@ export default {
         })
         .then((res) => {
           this.detailInfo = res.data;
-          console.log(res, "s");
+          uni.vk.setVuex("$cartoon.cartoonDetails", res.data);
+          console.log(uni.vk.getVuex("lifeData"));
         });
     },
     readDetail(data) {
