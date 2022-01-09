@@ -1,20 +1,13 @@
 <template>
   <view>
     <block v-for="(item, index) in contentList" :key="index">
-      <u--image :src="item" width="100%" bgColor="#616161" mode="widthFix" @click="showPopup = true"> </u--image>
+      <u--image :src="item" width="100%" bgColor="#616161" mode="widthFix" @click="showPopup = !showPopup"> </u--image>
     </block>
+
     <u-popup :show="showPopup" @close="showPopup = false" mode="top" :overlay="false" bgColor="rgba(30, 30, 30, 0.7)">
       <view class="head u-f-ac">
-        <u-icon
-          size="50rpx"
-          name="arrow-left"
-          color="#fff"
-          :label="`${detailInfo.current_number}-${detailInfo.current_name}`"
-          labelPos="right"
-          labelSize="40rpx"
-          labelColor="#fff"
-          space="50rpx"
-        ></u-icon>
+        <u-icon size="50rpx" name="arrow-left" color="#fff" @click="back"></u-icon>
+        <text>{{ detailInfo.current_number }}-{{ detailInfo.current_name }}</text>
       </view>
     </u-popup>
     <u-popup :show="showPopup" @close="showPopup = false" :overlay="false" bgColor="rgba(30, 30, 30, 0.7)">
@@ -34,23 +27,37 @@
         <u-icon
           size="50rpx"
           name="arrow-left-double"
-          color="#fff"
+          :color="location === 0 ? '#bfbfbf' : '#fff'"
           label="上一章"
           labelPos="bottom"
           labelSize="24rpx"
-          @click="jump('last')"
-          labelColor="#fff"
+          @click="
+            () => {
+              if (location === 0) {
+                return;
+              }
+              jump('last');
+            }
+          "
+          :labelColor="location === 0 ? '#bfbfbf' : '#fff'"
           space="20rpx"
         ></u-icon>
         <u-icon
           size="50rpx"
           name="arrow-right-double"
-          color="#fff"
+          :color="location === cartoonDetails.caricatureContentList.length - 1 ? '#bfbfbf' : '#fff'"
           label="下一章"
           labelPos="bottom"
           labelSize="24rpx"
-          @click="jump('next')"
-          labelColor="#fff"
+          @click="
+            () => {
+              if (location === cartoonDetails.caricatureContentList.length - 1) {
+                return;
+              }
+              jump('next');
+            }
+          "
+          :labelColor="location === cartoonDetails.caricatureContentList.length - 1 ? '#bfbfbf' : '#fff'"
           space="20rpx"
         ></u-icon>
       </view>
@@ -60,13 +67,12 @@
     <u-popup :show="showList" @close="showList = false">
       <view class="popup-title">
         全部章节
-        {{ location }}
         <block v-if="cartoonDetails.caricatureContentList">({{ cartoonDetails.caricatureContentList.length }})</block>
       </view>
       <view class="popup-content">
         <u-list>
           <u-list-item v-for="(item, index) in cartoonDetails.caricatureContentList" :key="index">
-            <view class="chapter u-f" @click="choose(item)">
+            <view class="chapter u-f" @click="choose(item, index)">
               <u--image :src="cartoonDetails.avatar" width="200rpx" height="112rpx" radius="10rpx" mode="aspectFill"></u--image>
               <view class="chapter-info">
                 <view :class="{ active: index == location }">
@@ -74,6 +80,9 @@
                   <text>{{ item.current_name }} </text>
                 </view>
                 <view>{{ item.create_date | date("yyyy-mm-dd") }}</view>
+              </view>
+              <view class="map" v-if="location === index">
+                <u-icon size="40rpx" color="#25aef3" name="map"></u-icon>
               </view>
             </view>
           </u-list-item>
@@ -117,6 +126,9 @@ export default {
   },
   // 函数
   methods: {
+    back() {
+      uni.navigateBack({ delta: 1 });
+    },
     // 页面数据初始化函数获取漫画数据
     getCaricatureContent(id) {
       uni.vk
@@ -136,28 +148,21 @@ export default {
       const { image_list } = this.detailInfo;
       image_list.length >= 1 && this.contentList.push(image_list.shift());
     },
-    choose(data) {
+    choose(data, index) {
+      if (this.location === index) {
+        return;
+      }
       console.log(data);
       this.clearList();
       this.getCaricatureContent(data._id);
     },
     jump(type) {
-      // console.log(type, this.cartoonDetails, this.isJump);
-      // if ((this.isJump === "first" && type == "last") || (this.isJump === "last" && type == "next")) {
-      //   return;
-      // }
       const { caricatureContentList } = this.cartoonDetails;
-      const { _id } = this.detailInfo;
-
-      let index = caricatureContentList.findIndex((v) => v._id == _id);
-
-      console.log(index);
+      this.clearList();
+      this.getCaricatureContent(caricatureContentList[this.location + (type == "next" ? 1 : -1)]._id);
     },
     clearList() {
       this.contentList = [];
-      this.detailInfo = {
-        image_list: [],
-      };
     },
   },
   // 过滤器
@@ -169,8 +174,6 @@ export default {
       const { caricatureContentList } = this.cartoonDetails;
       const { _id } = this.detailInfo;
       return caricatureContentList.findIndex((v) => v._id == _id);
-      // console.log("sssssss", index);
-      // let res = index === 0 ? "first" : index === caricatureContentList.length ? "last" : "";
     },
   },
 };
@@ -187,6 +190,8 @@ text {
 .head {
   height: 120rpx;
   padding: 0 20rpx;
+  color: #fff;
+  font-size: 40rpx;
 }
 .bottom {
   height: 150rpx;
@@ -211,6 +216,12 @@ text {
   font-size: 30rpx;
   .chapter {
     padding: 20rpx 30rpx;
+    position: relative;
+    .map {
+      position: absolute;
+      right: 5%;
+      top: 25%;
+    }
     .chapter-info {
       padding: 0 20rpx;
       color: #767a82;
