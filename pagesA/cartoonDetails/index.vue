@@ -48,7 +48,10 @@
     </view>
     <!--目录-->
     <u-popup :show="showList" @close="showList = false">
-      <view class="popup-title"> 全部章节 ({{ caricatureContentLength }}) </view>
+      <view class="popup-title u-f-ac">
+        全部章节
+        <block v-if="detailInfo.caricatureContentList">({{ detailInfo.caricatureContentList.length }})</block>
+      </view>
       <view class="popup-content">
         <u-list>
           <u-list-item v-for="(item, index) in detailInfo.caricatureContentList" :key="index">
@@ -76,12 +79,11 @@ export default {
     // 页面数据变量
     return {
       detailInfo: {},
-      showList: true,
+      showList: false,
     };
   },
   // 监听 - 页面每次【加载时】执行(如：前进)
   onLoad(options = {}) {
-    // console.log(options, "ssss");
     this.getCaricatureDetail(options.id);
   },
   // 函数
@@ -182,8 +184,8 @@ text {
   }
 }
 .popup-title {
-  height: 100rpx;
-  padding: 20rpx 30rpx;
+  height: 80rpx;
+  padding: 0 20rpx;
   font-size: 35rpx;
   font-weight: 510;
 }
@@ -191,13 +193,22 @@ text {
   height: 500rpx;
   font-size: 30rpx;
   .chapter {
-    padding: 20rpx 30rpx;
+    padding: 10rpx 20rpx;
+    position: relative;
+    .map {
+      position: absolute;
+      right: 5%;
+      top: 25%;
+    }
     .chapter-info {
       padding: 0 20rpx;
       color: #767a82;
       display: flex;
       justify-content: space-between;
       flex-direction: column;
+    }
+    .active {
+      color: #22afff !important;
     }
   }
 }

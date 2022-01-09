@@ -7,7 +7,7 @@
     <u-popup :show="showPopup" @close="showPopup = false" mode="top" :overlay="false" bgColor="rgba(30, 30, 30, 0.7)">
       <view class="head u-f-ac">
         <u-icon size="50rpx" name="arrow-left" color="#fff" @click="back"></u-icon>
-        <text>{{ detailInfo.current_number }}-{{ detailInfo.current_name }}</text>
+        <text>{{ detailInfo.current_number }}话 {{ detailInfo.current_name }}</text>
       </view>
     </u-popup>
     <u-popup :show="showPopup" @close="showPopup = false" :overlay="false" bgColor="rgba(30, 30, 30, 0.7)">
@@ -65,7 +65,7 @@
 
     <!--目录-->
     <u-popup :show="showList" @close="showList = false">
-      <view class="popup-title">
+      <view class="popup-title u-f-ac">
         全部章节
         <block v-if="cartoonDetails.caricatureContentList">({{ cartoonDetails.caricatureContentList.length }})</block>
       </view>
@@ -73,7 +73,7 @@
         <u-list>
           <u-list-item v-for="(item, index) in cartoonDetails.caricatureContentList" :key="index">
             <view class="chapter u-f" @click="choose(item, index)">
-              <u--image :src="cartoonDetails.avatar" width="200rpx" height="112rpx" radius="10rpx" mode="aspectFill"></u--image>
+              <u--image :src="cartoonDetails.avatar" width="250rpx" height="120rpx" radius="10rpx" mode="aspectFill"></u--image>
               <view class="chapter-info">
                 <view :class="{ active: index == location }">
                   <text>{{ item.current_number }} </text>
@@ -206,8 +206,8 @@ text {
   }
 }
 .popup-title {
-  height: 100rpx;
-  padding: 20rpx 30rpx;
+  height: 80rpx;
+  padding: 0 20rpx;
   font-size: 35rpx;
   font-weight: 510;
 }
@@ -215,7 +215,7 @@ text {
   height: 500rpx;
   font-size: 30rpx;
   .chapter {
-    padding: 20rpx 30rpx;
+    padding: 10rpx 20rpx;
     position: relative;
     .map {
       position: absolute;
