@@ -21,7 +21,7 @@
       <view class="start">
         <text>{{ detailInfo.caricature_status == "0" ? "连载中" : "已完结" }}</text>
         <text> | </text>
-        <text> 已更新至67话 </text>
+        <text v-if="detailInfo.caricatureContentList"> 已更新至{{detailInfo.caricatureContentList.length}}话 </text>
       </view>
       <view class="other">
         <text>作者：{{ detailInfo.author }}</text>
