@@ -27,6 +27,12 @@
       }
     },
     {
+      "path": "pages/login/register",
+      "style": {
+        "navigationBarTitleText": "注册"
+      }
+    },
+    {
       "path": "pagesA/cartoonDetails/index",
       "style": {
         "navigationBarTitleText": "漫画详情",

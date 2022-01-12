@@ -1,28 +1,26 @@
 // 引入自定义公共函数
-import myPubFunction from '@/common/function/myPubFunction.js'
+import myPubFunction from "@/common/function/myPubFunction.js";
 export default {
   // 开发模式启用调式模式(请求时会打印日志)
-  debug: process.env.NODE_ENV !== 'production',
+  debug: process.env.NODE_ENV !== "production",
   // 主云函数名称
   functionName: "router",
   // 登录页面路径
   login: {
-    url: '/pages_template/uni-id/login/index/index'
+    // url: "/pages_template/uni-id/login/index/index",
+    url: "/pages/login/index",
   },
   // 首页页面路径
   index: {
-    url: '/pages/index/index'
+    url: "/pages/index/index",
   },
   // 404 Not Found 错误页面路径
   error: {
-    url: '/pages/error/404/404'
+    url: "/pages/error/404/404",
   },
   // 日志风格
   logger: {
-    colorArr: [
-      "#0095f8",
-      "#67C23A"
-    ]
+    colorArr: ["#0095f8", "#67C23A"],
   },
   /**
    * app主题颜色
@@ -31,7 +29,7 @@ export default {
    */
   color: {
     main: "#ff4444",
-    secondary: "#555555"
+    secondary: "#555555",
   },
   // 需要检查是否登录的页面列表
   checkTokenPages: {
@@ -41,16 +39,11 @@ export default {
      * 如果 mode = 2 则代表list内的页面不需要登录，不在list内的页面需要登录
      * 注意1: list内是通配符表达式，非正则表达式
      * 注意2: 需要使用 vk.navigateTo 代替 uni.navigateTo 进行页面跳转才会生效
-		 * 注意3: 首次进入的页面暂无法检测，故不会生效。
-		 * 但只要页面上执行kh或sys函数，会自动判断是否登录，未登录也会自动跳登录页面，登录成功后会自动返回本来要跳转的页面。
+     * 注意3: 首次进入的页面暂无法检测，故不会生效。
+     * 但只要页面上执行kh或sys函数，会自动判断是否登录，未登录也会自动跳登录页面，登录成功后会自动返回本来要跳转的页面。
      */
     mode: 2,
-    list: [
-      "/pages_template/*",
-      "/pages/login/*",
-      "/pages/index/*",
-      "/pages/error/*"
-    ]
+    list: ["/pages_template/*", "/pages/login/*", "/pages/index/*", "/pages/error/*"],
   },
   // 需要检查是否可以分享的页面列表(仅小程序有效)
   checkSharePages: {
@@ -62,17 +55,13 @@ export default {
      */
     mode: 0,
     // ['shareAppMessage', 'shareTimeline'],
-    menus: ['shareAppMessage'],
-    list: [
-      "/pages/index/*",
-      "/pages/goods/*",
-      "/pages_template/*",
-    ]
+    menus: ["shareAppMessage"],
+    list: ["/pages/index/*", "/pages/goods/*", "/pages_template/*"],
   },
   // 静态文件的资源URL地址
   staticUrl: {
     // Logo
-    logo: '/static/logo.png',
+    logo: "/static/logo.png",
   },
   // 自定义公共函数，myPubFunction内的函数可通过vk.myfn.xxx() 调用
   myfn: myPubFunction,
@@ -96,8 +85,8 @@ export default {
       // 上传时,是否按用户id进行分组储存
       groupUserId: true,
       // 是否默认上传到阿里云OSS
-      isDefault: false
-    }
+      isDefault: false,
+    },
   },
   // 全局异常码，可以自定义提示结果
   globalErrorCode: {
@@ -106,11 +95,10 @@ export default {
     // 请求超时（真正的请求超时）
     "cloudfunction-timeout": "请求超时，请重试！",
     // 不在预期内的异常（如数据库异常、云函数编译异常等）
-    "cloudfunction-system-error": "网络开小差了！"
+    "cloudfunction-system-error": "网络开小差了！",
   },
   // 自定义拦截器
   interceptor: {
-
     // login:function(obj){
     // 	let { vk, params, res } = obj;
     // 	//console.log("params:",params);
@@ -121,7 +109,6 @@ export default {
     // 	console.log("跳自己的登录页面");
     // 	// 上方代码可自己修改，写成你自己的逻辑处理。
     // },
-
     // fail:function(obj){
     // 	let { vk, params, res } = obj;
     // 	//console.log("params:",params);
@@ -129,6 +116,5 @@ export default {
     // 	return false;// 返回false则取消框架内置fail的逻辑,返回true则会继续执行框架内置fail的逻辑
     // 	// 上方代码可自己修改，写成你自己的逻辑处理。
     // }
-
-  }
-}
+  },
+};

@@ -1,34 +1,30 @@
 <template>
-  <view class="page">
+  <view>
     <view class="log u-f-ajc">
       <image src="@/static/logo.png" mode="widthFix"></image>
       <view>startLine-caricature</view>
     </view>
     <view class="form">
       <view class="group u-f-ac">
-        <u-icon class="icon" name="account-fill" color="#c0c4cc" size="38"></u-icon>
-        <u-input
-          class="input"
-          v-model="username"
-          type="text"
-          height="90"
-          placeholder="请输入您的账号"
-          style="width: 100%"
-          placeholder-style="color: #999999;"
-          maxlength="20"
-        />
+        <u-input v-model="username" type="text" placeholder="请输入您的账号" prefixIcon="account-fill" maxlength="20" shape="circle" />
       </view>
       <view class="group u-f-ac" style="margin-bottom: 75rpx">
-        <u-icon class="icon" name="lock-fill" color="#c0c4cc" size="38"></u-icon>
-        <input class="input" :password="passwordType" placeholder="请输入您的密码" placeholder-class="place" v-model="password" maxlength="20" />
-        <u-icon class="icon" :name="passwordType ? 'eye-off' : 'eye-fill'" color="#c0c4cc" size="38" @click="passwordType = !passwordType"></u-icon>
+        <u-input v-model="password" :password="passwordType" type="text" prefixIcon="lock-fill" placeholder="请输入您的密码" maxlength="20" shape="circle">
+          <template slot="suffix">
+            <u-icon class="icon" :name="passwordType ? 'eye-off' : 'eye-fill'" color="#c0c4cc" size="45rpx" @click="passwordType = !passwordType"></u-icon>
+          </template>
+        </u-input>
       </view>
 
       <u-button class="btn" type="primary" @click="login">登录</u-button>
-	  <!-- <u-button class="btn" type="primary" @click="register">登录</u-button> -->
+    </view>
+
+    <view class="footer u-f-ajc">
+      <navigator url="../forget/forget" open-type="navigate">找回密码</navigator>
+      <text class="center-line">|</text>
+      <navigator url="./register" open-type="navigate">注册账号</navigator>
     </view>
     <u-toast ref="uToast" />
-    <image class="bottom" src="@/static/loginbg.png" mode="widthFix"></image>
   </view>
 </template>
 
@@ -83,37 +79,42 @@ export default {
 };
 </script>
 
-<style lang="less">
-page {
-  background-color: #ffffff;
-}
+<style lang="scss">
 .log {
-  margin: 100rpx 0;
+  padding: 50rpx 0;
   color: #2d6de3;
   font-size: 40rpx;
   font-weight: bold;
   flex-direction: column;
   image {
-    width: 30%;
+    width: 300rpx;
   }
 }
 .form {
   padding: 30rpx;
   .group {
-    border-bottom: 1rpx solid #dbdbdb;
-    .input {
-      height: 90rpx;
-      width: 555rpx;
-      padding: 0 20rpx;
-      font-size: 30rpx;
-    }
+    margin: 20rpx 0;
+  }
+  .btn {
+    width: 600rpx;
+    border-radius: 50rpx;
   }
 }
-.bottom {
-  position: absolute;
-  width: 100%;
-  bottom: 0;
-  left: 0;
-  right: 0;
+.footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 32rpx;
+  margin-top: 50rpx;
+  color: rgba(0, 0, 0, 0.7);
+  text-align: center;
+  height: 40rpx;
+  line-height: 40rpx;
+  .center-line {
+    font-size: 24rpx;
+    margin-left: 15rpx;
+    margin-right: 15rpx;
+  }
 }
 </style>
