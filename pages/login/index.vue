@@ -16,7 +16,8 @@
         </u-input>
       </view>
 
-      <u-button class="btn" type="primary" @click="login">登录</u-button>
+      <!-- <u-button class="btn" type="primary" @click="login">登录</u-button> -->
+      <u-button class="btn" type="primary" @click="register">注册</u-button>
     </view>
 
     <view class="footer u-f-ajc">
@@ -34,7 +35,7 @@ export default {
   data() {
     return {
       //13399908887 13399908889 经理13399958881 !QAZ2wsx 18933334445
-      username: "qq430482",
+      username: "qq1399848107",
       password: "qq430482",
       passwordType: true,
     };
@@ -43,20 +44,21 @@ export default {
   methods: {
     // 登录
     login() {
-      if (!(commonTest(this.username, "请输入账号") && commonTest(this.password, "请输入密码"))) return;
+      const { username, password } = this;
+      if (!(commonTest(this.username, "请输入邮号") && commonTest(this.password, "请输入密码"))) return;
       uni.showLoading({
         title: "登录中",
       });
 
-      const { username, password } = this;
-      uni.vk.userCenter.login({
+      uni.vk.userCenter.loginByEmail({
         data: {
-          username,
-          password,
+          email: username,
+          password: password,
         },
-        success: function (data) {
-          // 登录成功后将用户信息写入$store
+        success: function (res) {
+          // 成功后的逻辑
           uni.vk.setVuex("$user.userInfo", data.userInfo);
+          console.log("res登录成功", res);
           uni.vk.alert("登陆成功!");
         },
       });
@@ -66,6 +68,7 @@ export default {
       const { username, password } = this;
       uni.vk.userCenter.register({
         data: {
+          email: "1399848107@qq.com",
           username,
           password,
         },

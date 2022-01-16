@@ -4,40 +4,38 @@
     <view class="content">
       <!-- 头部logo -->
       <view class="header"><image class="logo" :src="logoImage"></image></view>
-      <!-- 主体 -->
-      <view class="form-view">
-        <view class="form-item form-border">
-          <!-- 文本框 -->
-          <input class="form-input" v-model="form1.mobile" type="text" :maxlength="11" placeholder="手机号" placeholder-style="'color':'#8e8e8e'" />
+      <view class="form">
+        <view class="group u-f-ac">
+          <u-input v-model="form.email" type="text" placeholder="请输入您的邮箱" prefixIcon="account-fill" maxlength="20" shape="circle" />
+        </view>
+        <view class="group u-f-ac">
+          <u-input v-model="form.password" type="text" password placeholder="请输入您的密码" prefixIcon="lock-fill" maxlength="20" shape="circle" />
+        </view>
+        <view class="group u-f-ac">
+          <u-input v-model="form.password2" type="text" password placeholder="请再次输入您的密码" prefixIcon="lock-fill" maxlength="20" shape="circle" />
         </view>
 
-        <view class="form-item form-border">
-          <!-- 文本框 -->
-          <input class="form-input" v-model="form1.password" type="password" placeholder="请输入新密码" placeholder-style="'color':'#8e8e8e'" />
-        </view>
-        <view class="form-item form-border">
-          <!-- 文本框 -->
-          <input class="form-input" v-model="form1.password2" type="password" placeholder="请再次输入新密码" placeholder-style="'color':'#8e8e8e'" />
-        </view>
-
-        <view class="form-item form-border">
-          <!-- 文本框 -->
-          <input class="form-input" v-model="form1.code" type="number" :maxlength="6" placeholder="请输入验证码" placeholder-style="'color':'#8e8e8e'" />
-          <!-- 验证码倒计时开始 -->
-          <vk-data-verification-code seconds="60" :mobile="form1.mobile" type="register" custom-style="font-size: 28rpx;"></vk-data-verification-code>
-          <!-- 验证码倒计时结束 -->
+        <view class="group u-f-ac">
+          <u--input placeholder="请输入验证码" shape="circle" v-model="form.code">
+            <template slot="suffix">
+              <u-code ref="uCode" @change="codeChange" seconds="60" changeText="X秒重新获取"></u-code>
+              <u-button @tap="getCode" :text="tips" type="success" size="mini"></u-button>
+            </template>
+          </u--input>
         </view>
       </view>
+
       <view class="login-btn">
         <button class="btn success circle" hover-class="hover" shape="circle" @click="loginBySms" :plain="false" :hair-line="false" type="success">
           注 册
         </button>
       </view>
+
       <!-- 底部信息 -->
       <view class="footer">
         <label>
           <checkbox-group @change="checkboxChange">
-            <checkbox class="footer-checkbox" value="true" :checked="form1.agreement" active-color="#737373" shape="circle"></checkbox><text>同意</text>
+            <checkbox class="footer-checkbox" value="true" :checked="form.agreement" active-color="#737373" shape="circle"></checkbox><text>同意</text>
           </checkbox-group>
         </label>
 
@@ -57,20 +55,19 @@ export default {
   data() {
     // 页面数据变量
     return {
-      // init请求返回的数据
-      data: {},
       // 表单请求数据
-      form1: {
+      form: {
         agreement: true,
-        mobile: "",
-        password: "",
-        password2: "",
+        email: "startline_05@163.com",
+        password: "qq430482",
+        password2: "qq430482",
         code: "",
         type: "register",
       },
       scrollTop: 0,
       isRotate: false,
       logoImage: "/static/logo.png",
+      tips: "",
     };
   },
   onPageScroll(e) {
@@ -82,18 +79,6 @@ export default {
     vk = that.vk;
     //console.log("onLoad",options);
     that.init(options);
-  },
-  // 监听 - 页面【首次渲染完成时】执行。注意如果渲染速度快，会在页面进入动画完成前触发
-  onReady() {},
-  // 监听 - 页面每次【显示时】执行(如：前进和返回) (页面每次出现在屏幕上都触发，包括从下级页面点返回露出当前页面)
-  onShow() {},
-  // 监听 - 页面每次【隐藏时】执行(如：返回)
-  onHide() {},
-  // 监听 - 页面下拉刷新
-  onPullDownRefresh() {
-    setTimeout(function () {
-      uni.stopPullDownRefresh();
-    }, 1000);
   },
   // 监听 - 页面触底部
   onReachBottom() {},
@@ -115,9 +100,9 @@ export default {
     checkboxChange(e) {
       let value = e.detail.value || [];
       if (value.length > 0 && value[0]) {
-        that.form1.agreement = true;
+        that.form.agreement = true;
       } else {
-        that.form1.agreement = false;
+        that.form.agreement = false;
       }
     },
     // 登录(手机号+验证码) 不存在会自动注册
@@ -126,13 +111,13 @@ export default {
         //判断是否加载中，避免重复点击请求
         return false;
       }
-      const { agreement, mobile, code, password, password2 } = that.form1;
+      const { agreement, email, code, password, password2 } = that.form;
       if (!agreement) {
         vk.toast("请阅读并同意用户服务及隐私协议", "none");
         return;
       }
-      if (!vk.pubfn.checkStr(mobile, "mobile")) {
-        vk.toast("请输入正确的手机号码", "none");
+      if (!vk.pubfn.checkStr(email, "email")) {
+        vk.toast("请输入正确的邮箱号码", "none");
         return;
       }
       if (!vk.pubfn.checkStr(password, "pwd")) {
@@ -147,20 +132,16 @@ export default {
         vk.toast("两次密码必须相同!", "none");
         return;
       }
-      if (!vk.pubfn.checkStr(code, "mobileCode")) {
+      if (!vk.pubfn.checkStr(code, "emailCode")) {
         vk.toast("验证码格式为6位数字", "none");
         return;
       }
       that.isRotate = true;
-      vk.userCenter.loginBySms({
-        data: that.form1,
+      vk.userCenter.loginByEmail({
+        data: that.form,
         success: function (data) {
           that.isRotate = false;
-          if (data.type == "login") {
-            vk.toast("登录成功!");
-          } else {
-            vk.toast("注册成功!");
-          }
+          vk.toast("注册成功!");
           setTimeout(function () {
             // 跳转到首页,或页面返回
             var pages = getCurrentPages();
@@ -177,6 +158,38 @@ export default {
         },
       });
     },
+    codeChange(text) {
+      this.tips = text;
+    },
+    getCode() {
+      const { email } = this.form;
+      if (!vk.pubfn.checkStr(email, "email")) {
+        vk.toast("请输入正确的邮箱号码", "none");
+        return;
+      }
+      if (this.$refs.uCode.canGetCode) {
+        // 模拟向后端请求验证码
+        uni.showLoading({
+          title: "正在获取验证码",
+        });
+        vk.callFunction({
+          url: "client/register/pub/email",
+          title: "请求中...",
+          data: {
+            type: "register",
+            serviceType: "163",
+            email: email,
+          },
+        }).then((res) => {
+          // 这里此提示会被this.start()方法中的提示覆盖
+          uni.$u.toast("验证码已发送");
+          // 通知验证码组件内部开始倒计时
+          this.$refs.uCode.start();
+        });
+      } else {
+        uni.$u.toast("倒计时结束后再发送");
+      }
+    },
   },
   // 过滤器
   filters: {},
@@ -186,4 +199,15 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import url("./main.css");
+
+.form {
+  padding: 30rpx;
+  .group {
+    margin: 20rpx 0;
+  }
+  .btn {
+    width: 600rpx;
+    border-radius: 50rpx;
+  }
+}
 </style>
