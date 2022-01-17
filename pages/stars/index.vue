@@ -46,15 +46,7 @@ export default {
     // 页面数据初始化函数
     init(options) {
       // promise方式
-      vk.callFunction({
-        url: "client/caricature/kh/getStoreCaricature",
-        title: "请求中...",
-        data: {},
-      }).then((res) => {
-        console.log(res, "s");
-        this.list = res.rows;
-      });
-      this.$store.dispatch("$user/getStoreCaricature");
+      // this.$store.dispatch("$user/getStoreCaricature");
     },
     pageTo(path) {
       vk.navigateTo(path);
