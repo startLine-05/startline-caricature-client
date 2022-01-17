@@ -53,39 +53,32 @@ export default {
   onLoad() {},
   methods: {
     // 登录
-    login() {
+    async login() {
       const { email, password, code, type } = this;
       if (!(commonTest(email, "请输入邮号") && commonTest(password, "请输入密码"))) return;
       uni.showLoading({
         title: "登录中",
       });
+      var res;
       if (type == "pasd") {
-        uni.vk.userCenter.login({
+        res = await uni.vk.userCenter.login({
           data: {
             username: email,
             password,
           },
-          success: function (res) {
-            // 成功后的逻辑
-            uni.vk.setVuex("$user.userInfo", res.userInfo);
-            console.log("res登录成功", res);
-            uni.$u.toast("登陆成功");
-          },
         });
       } else {
-        const res = uni.vk.userCenter.loginByEmail({
+        res = await uni.vk.userCenter.loginByEmail({
           data: {
             email,
             code,
           },
-          success: function (res) {
-            // 成功后的逻辑
-            uni.vk.setVuex("$user.userInfo", res.userInfo);
-            console.log("res登录成功", res);
-            uni.$u.toast("登陆成功");
-          },
         });
       }
+      // console.log("res登录成功", res);
+      uni.vk.setVuex("$user.userInfo", res.userInfo);
+      uni.vk.vuex.dispatch("$user/getStoreCaricature");
+      uni.$u.toast("登陆成功");
     },
     codeChange(text) {
       this.tips = text;

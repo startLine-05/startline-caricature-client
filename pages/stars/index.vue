@@ -6,9 +6,7 @@
 var that; // 当前页面对象
 var vk; // vk依赖
 export default {
-	components:{
-		
-	},
+  components: {},
   data() {
     // 页面数据变量
     return {
@@ -49,14 +47,14 @@ export default {
     init(options) {
       // promise方式
       vk.callFunction({
-      	url: "client/caricature/kh/getStoreCaricature",
-      	title: "请求中...",
-      	data: {
-      	},
+        url: "client/caricature/kh/getStoreCaricature",
+        title: "请求中...",
+        data: {},
       }).then((res) => {
-      	console.log(res, "s");
-      	this.list = res.rows;
+        console.log(res, "s");
+        this.list = res.rows;
       });
+      this.$store.dispatch("$user/getStoreCaricature");
     },
     pageTo(path) {
       vk.navigateTo(path);

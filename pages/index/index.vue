@@ -43,7 +43,7 @@ export default {
           fontSize: "20",
         },
         {
-          option: "addStore",
+          option: "addStars",
           name: "加入书架",
           color: "#ffaa7f",
           fontSize: "20",
@@ -94,16 +94,16 @@ export default {
     },
     selectClick(data) {
       console.log(data);
-      if (data.option === "addStore") {
+      if (data.option === "addStars") {
         vk.callFunction({
-          url: "client/caricature/kh/addStoreCaricature",
+          url: "client/caricature/kh/addStarsCaricature",
           title: "请求中...",
           data: {
             caricature_id: row._id,
             option: "add",
           },
         }).then((res) => {
-          console.log(res, "s");
+          vk.vuex.dispatch("$user/getStoreCaricature");
         });
       } else {
         //测试获取详情

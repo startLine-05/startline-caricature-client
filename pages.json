@@ -8,8 +8,7 @@
       }
     },
     {
-      "path": "pages/store/index",
-      // "path": "components/comment/index",
+      "path": "pages/stars/index",
       "style": {
         "navigationBarTitleText": "收藏"
       }
@@ -180,7 +179,7 @@
         "selectedIconPath": "static/tab/index-active.png"
       },
       {
-        "pagePath": "pages/store/index",
+        "pagePath": "pages/stars/index",
         // "pagePath":"components/comment/index",
         "text": "我的书架",
         "iconPath": "static/tab/store.png",
