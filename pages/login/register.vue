@@ -3,7 +3,7 @@
     <!-- 页面内容开始 -->
     <view class="content">
       <!-- 头部logo -->
-      <view class="header"><image class="logo" :src="logoImage"></image></view>
+      <view class="header"><image class="logo" src="/static/logo.png"></image></view>
       <view class="form">
         <view class="group u-f-ac">
           <u-input v-model="form.email" type="text" placeholder="请输入您的邮箱" prefixIcon="account-fill" maxlength="20" shape="circle" />
@@ -39,17 +39,23 @@
           </checkbox-group>
         </label>
 
-        <!-- 协议地址 -->
-        <navigator url="" open-type="navigate" style="color: #007aff">《用户协议》</navigator>
+        <!-- 协议 -->
+        <text style="color: #007aff" @click="show = true">《用户协议》</text>
       </view>
-    </view>
 
-    <!-- 页面内容结束 -->
+      <u-modal
+        :show="show"
+        :closeOnClickOverlay="true"
+        @close="show = false"
+        @confirm="show = false"
+        title="免责声明"
+        content="该项目遵循MIT开源协议，漫画素材均来自网络，请勿用于商业，违者概不负责"
+      ></u-modal>
+    </view>
   </view>
 </template>
 
 <script>
-var that; // 当前页面对象
 var vk; // vk依赖
 export default {
   data() {
@@ -64,54 +70,32 @@ export default {
         code: "",
         type: "register",
       },
-      scrollTop: 0,
-      isRotate: false,
-      logoImage: "/static/logo.png",
+      isRotate: false, //是否已经请求
       tips: "",
+      show: false,
     };
-  },
-  onPageScroll(e) {
-    that.scrollTop = e.scrollTop;
   },
   // 监听 - 页面每次【加载时】执行(如：前进)
   onLoad(options) {
-    that = this;
-    vk = that.vk;
-    //console.log("onLoad",options);
-    that.init(options);
+    vk = this.vk;
   },
-  // 监听 - 页面触底部
-  onReachBottom() {},
-  // 监听 - 窗口尺寸变化(仅限:App、微信小程序)
-  onResize() {},
-  // 监听 - 点击右上角转发时
-  onShareAppMessage(options) {},
-  // 监听 - 页面创建时
-  created() {},
   // 函数
   methods: {
-    // 页面数据初始化函数
-    init(options = {}) {
-      console.log("init: ", options);
-    },
-    pageTo(path) {
-      vk.navigateTo(path);
-    },
     checkboxChange(e) {
       let value = e.detail.value || [];
       if (value.length > 0 && value[0]) {
-        that.form.agreement = true;
+        this.form.agreement = true;
       } else {
-        that.form.agreement = false;
+        this.form.agreement = false;
       }
     },
     // 登录(手机号+验证码) 不存在会自动注册
     loginBySms() {
-      if (that.isRotate) {
+      if (this.isRotate) {
         //判断是否加载中，避免重复点击请求
         return false;
       }
-      const { agreement, email, code, password, password2 } = that.form;
+      const { agreement, email, code, password, password2 } = this.form;
       if (!agreement) {
         vk.toast("请阅读并同意用户服务及隐私协议", "none");
         return;
@@ -136,11 +120,11 @@ export default {
         vk.toast("验证码格式为6位数字", "none");
         return;
       }
-      that.isRotate = true;
+      this.isRotate = true;
       vk.userCenter.loginByEmail({
-        data: that.form,
+        data: this.form,
         success: function (data) {
-          that.isRotate = false;
+          this.isRotate = false;
           vk.toast("注册成功!");
           setTimeout(function () {
             // 跳转到首页,或页面返回
@@ -154,7 +138,7 @@ export default {
           }, 1000);
         },
         complete: function () {
-          that.isRotate = false;
+          this.isRotate = false;
         },
       });
     },
@@ -177,7 +161,7 @@ export default {
           title: "请求中...",
           data: {
             type: "register",
-            serviceType: "163",
+            serviceType: "163", //默认写死163 邮箱配置
             email: email,
           },
         }).then((res) => {
@@ -209,5 +193,10 @@ export default {
     width: 600rpx;
     border-radius: 50rpx;
   }
+}
+.mode {
+  width: 600rpx;
+  height: 400rpx;
+  padding: 15rpx;
 }
 </style>

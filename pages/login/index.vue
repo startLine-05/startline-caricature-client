@@ -6,26 +6,33 @@
     </view>
     <view class="form">
       <view class="group u-f-ac">
-        <u-input v-model="username" type="text" placeholder="请输入您的账号" prefixIcon="account-fill" maxlength="20" shape="circle" />
+        <u-input v-model="email" type="text" placeholder="请输入您的账号" prefixIcon="account-fill" maxlength="20" shape="circle" />
       </view>
-      <view class="group u-f-ac" style="margin-bottom: 75rpx">
+      <view class="group u-f-ac" style="margin-bottom: 75rpx" v-if="type == 'pasd'">
         <u-input v-model="password" :password="passwordType" type="text" prefixIcon="lock-fill" placeholder="请输入您的密码" maxlength="20" shape="circle">
           <template slot="suffix">
             <u-icon class="icon" :name="passwordType ? 'eye-off' : 'eye-fill'" color="#c0c4cc" size="45rpx" @click="passwordType = !passwordType"></u-icon>
           </template>
         </u-input>
       </view>
+      <view class="group u-f-ac" style="margin-bottom: 75rpx" v-else>
+        <u--input placeholder="请输入验证码" shape="circle" v-model="code">
+          <template slot="suffix">
+            <u-code ref="uCode" @change="codeChange" seconds="60" changeText="X秒重新获取"></u-code>
+            <u-button @tap="getCode" :text="tips" type="success" size="mini"></u-button>
+          </template>
+        </u--input>
+      </view>
 
-      <!-- <u-button class="btn" type="primary" @click="login">登录</u-button> -->
-      <u-button class="btn" type="primary" @click="register">注册</u-button>
+      <u-button class="btn" type="primary" @click="login">登录</u-button>
     </view>
 
     <view class="footer u-f-ajc">
-      <navigator url="../forget/forget" open-type="navigate">找回密码</navigator>
+      <text v-if="type == 'pasd'" open-type="navigate" @click="type = 'code'">验证码登录</text>
+      <text v-else open-type="navigate" @click="type = 'pasd'">密码登录</text>
       <text class="center-line">|</text>
       <navigator url="./register" open-type="navigate">注册账号</navigator>
     </view>
-    <u-toast ref="uToast" />
   </view>
 </template>
 
@@ -35,48 +42,84 @@ export default {
   data() {
     return {
       //13399908887 13399908889 经理13399958881 !QAZ2wsx 18933334445
-      username: "qq1399848107",
+      email: "startline_05@163.com",
       password: "qq430482",
+      code: "",
+      type: "pasd",
       passwordType: true,
+      tips: "",
     };
   },
   onLoad() {},
   methods: {
     // 登录
     login() {
-      const { username, password } = this;
-      if (!(commonTest(this.username, "请输入邮号") && commonTest(this.password, "请输入密码"))) return;
+      const { email, password, code, type } = this;
+      if (!(commonTest(email, "请输入邮号") && commonTest(password, "请输入密码"))) return;
       uni.showLoading({
         title: "登录中",
       });
-
-      uni.vk.userCenter.loginByEmail({
-        data: {
-          email: username,
-          password: password,
-        },
-        success: function (res) {
-          // 成功后的逻辑
-          uni.vk.setVuex("$user.userInfo", data.userInfo);
-          console.log("res登录成功", res);
-          uni.vk.alert("登陆成功!");
-        },
-      });
+      if (type == "pasd") {
+        uni.vk.userCenter.login({
+          data: {
+            username: email,
+            password,
+          },
+          success: function (res) {
+            // 成功后的逻辑
+            uni.vk.setVuex("$user.userInfo", res.userInfo);
+            console.log("res登录成功", res);
+            uni.$u.toast("登陆成功");
+          },
+        });
+      } else {
+        const res = uni.vk.userCenter.loginByEmail({
+          data: {
+            email,
+            code,
+          },
+          success: function (res) {
+            // 成功后的逻辑
+            uni.vk.setVuex("$user.userInfo", res.userInfo);
+            console.log("res登录成功", res);
+            uni.$u.toast("登陆成功");
+          },
+        });
+      }
     },
-    // 用户注册
-    register() {
-      const { username, password } = this;
-      uni.vk.userCenter.register({
-        data: {
-          email: "1399848107@qq.com",
-          username,
-          password,
-        },
-        success: function (data) {
-          console.log("ssss", data);
-          uni.vk.alert("注册成功!");
-        },
-      });
+    codeChange(text) {
+      this.tips = text;
+    },
+    getCode() {
+      const { email } = this;
+      if (!uni.vk.pubfn.checkStr(email, "email")) {
+        uni.$u.toast("请输入正确的邮箱号码");
+        return;
+      }
+      if (this.$refs.uCode.canGetCode) {
+        // 模拟向后端请求验证码
+        uni.showLoading({
+          title: "正在获取验证码",
+        });
+        uni.vk
+          .callFunction({
+            url: "client/register/pub/email",
+            title: "请求中...",
+            data: {
+              type: "login",
+              serviceType: "163",
+              email,
+            },
+          })
+          .then((res) => {
+            // 这里此提示会被this.start()方法中的提示覆盖
+            uni.$u.toast("验证码已发送");
+            // 通知验证码组件内部开始倒计时
+            this.$refs.uCode.start();
+          });
+      } else {
+        uni.$u.toast("倒计时结束后再发送");
+      }
     },
   },
 };
