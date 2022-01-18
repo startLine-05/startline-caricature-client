@@ -5,8 +5,17 @@
         <u-avatar :src="vk.getVuex('$user.userInfo.avatar') || '/static/default.png'" size="60"></u-avatar>
       </view>
       <view class="name">
-        <view> {{ vk.getVuex("$user.userInfo.nickname") || "暂无昵称" }}</view>
-        <view class="signature">该用户还没有签名</view>
+        <view class="u-f-ac">
+          <text style="margin-right: 10rpx">
+            {{ vk.getVuex("$user.userInfo.nickname") || "暂无昵称" }}
+          </text>
+
+          <block v-if="vk.getVuex('$user.userInfo.gender')">
+            <u-icon v-if="vk.getVuex('$user.userInfo.gender') == 1" name="man" color="#2979ff" size="50rpx"></u-icon>
+            <u-icon v-else name="woman" color="#dd5145" size="50rpx"></u-icon>
+          </block>
+        </view>
+        <view class="signature">{{ vk.getVuex("$user.userInfo.signature") || "该用户还没有签名" }}</view>
       </view>
       <view class="other">
         <u-icon name="arrow-right" size="38rpx" color="#c0c4cc"></u-icon>
@@ -17,7 +26,7 @@
 
     <view>
       <u-cell-group>
-        <block v-for="(item, index) in list" :key="item.id">
+        <block v-for="(item, index) in list" :key="index">
           <u-cell icon-size="50rpx" :icon="item.icon" :icon-style="{ color: item.color }" :title="item.text" @click="handle(index)"></u-cell>
         </block>
       </u-cell-group>
@@ -28,51 +37,34 @@
 <script>
 export default {
   data() {
-    return {};
-  },
-  computed: {
-    list: function () {
-      //前往的功能模块
-      return [
+    return {
+      list: [
         {
-          id: 1,
           text: "编辑信息",
           icon: "edit-pen-fill",
-          url: "/pagesB/bindPush/index",
+          url: "/pagesA/userInfo/index",
           color: "#2979ff",
         },
         {
-          id: 5,
           text: "稍后再看",
           icon: "grid-fill",
           url: "/pagesB/collection/index",
           color: "#f1a532",
         },
         {
-          id: 7,
           text: "退出登录",
           icon: "setting-fill",
           url: "",
           color: "#6a6266",
         },
-      ];
-    },
+      ],
+    };
   },
   methods: {
-    toLogin() {
-      uni.navigateTo({
-        url: "/pages/login/index",
-      });
-    },
     handle(index) {
-      // console.log(index)
-      //路由跳转
-      // if (this.list[index].id < 6) {
-      //   uni.navigateTo({
-      //     url: `${this.list[index].url}`,
-      //   });
-      // }
-      uni.vk.navigateTo("/pages/login/index");
+      const { list } = this;
+      const url = list[index].url;
+      uni.vk.navigateTo(url);
     },
   },
 };
@@ -94,7 +86,9 @@ pages {
   .name {
     flex: 10;
     color: $u-main-color;
+    font-weight: bold;
     .signature {
+      font-weight: 500;
       margin-top: 10rpx;
       color: $u-tips-color;
       font-size: 24rpx;

@@ -96,8 +96,7 @@ export default {
         });
         uni.vk
           .callFunction({
-            url: "client/register/pub/email",
-            title: "请求中...",
+            url: "client/user/pub/email",
             data: {
               type: "login",
               serviceType: "163",

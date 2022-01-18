@@ -158,8 +158,7 @@ export default {
           title: "正在获取验证码",
         });
         vk.callFunction({
-          url: "client/register/pub/email",
-          title: "请求中...",
+          url: "client/user/pub/email",
           data: {
             type: "register",
             serviceType: "163", //默认写死163 邮箱配置

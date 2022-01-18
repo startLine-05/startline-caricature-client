@@ -63,5 +63,10 @@ export default {
           uni.vk.vuex.set("$user.userStars", res.rows);
         });
     },
+    getCurrentUserInfo({ commit }, data) {
+      uni.vk.userCenter.getCurrentUserInfo().then((res) => {
+        uni.vk.vuex.set("$user.userInfo", res.userInfo);
+      });
+    },
   },
 };

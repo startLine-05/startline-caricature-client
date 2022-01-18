@@ -48,6 +48,12 @@
       }
     },
     {
+      "path": "pagesA/userInfo/index",
+      "style": {
+        "navigationBarTitleText": "个人中心"
+      }
+    },
+    {
       "path": "pages/test/test",
       "style": {
         "navigationBarTitleText": "演示页面"
