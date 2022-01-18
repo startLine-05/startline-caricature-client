@@ -124,7 +124,7 @@ export default {
       vk.userCenter.loginByEmail({
         data: this.form,
         success: function (data) {
-          vk.vuex.dispatch("$user/getStoreCaricature");
+          vk.vuex.dispatch("$user/getStarsCaricature");
           this.isRotate = false;
           vk.toast("注册成功!");
           setTimeout(function () {

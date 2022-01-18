@@ -53,10 +53,10 @@ export default {
    * 2. Action 可以包含任意异步操作。
    */
   actions: {
-    getStoreCaricature({ commit }, data) {
+    getStarsCaricature({ commit }, data) {
       uni.vk
         .callFunction({
-          url: "client/caricature/kh/getStoreCaricature",
+          url: "client/caricature/kh/getStarsCaricature",
         })
         .then((res) => {
           //更新收藏

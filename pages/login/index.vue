@@ -77,7 +77,7 @@ export default {
       }
       // console.log("res登录成功", res);
       uni.vk.setVuex("$user.userInfo", res.userInfo);
-      uni.vk.vuex.dispatch("$user/getStoreCaricature");
+      uni.vk.vuex.dispatch("$user/getStarsCaricature");
       uni.$u.toast("登陆成功");
       setTimeout(function () {
         // 跳转到首页,或页面返回
