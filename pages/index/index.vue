@@ -1,6 +1,13 @@
 <template>
   <view>
-    <view class="head"></view>
+    <view class="head">
+      <view class="search">
+        <u-search class="search" bgColor="#fff" :show-action="true" actionText="搜索" :animation="true"></u-search>
+      </view>
+
+      <u-swiper :list="list1" indicator circular previousMargin="30" nextMargin="30" :autoplay="false" radius="5" bgColor="#ffffff"></u-swiper>
+    </view>
+
     <view class="list u-f-ac">
       <block v-for="item in list" :key="item._id">
         <card :cardInfo="item" />
@@ -19,6 +26,11 @@ export default {
     // 页面数据变量
     return {
       list: [],
+      list1: [
+        "https://cdn.uviewui.com/uview/swiper/swiper1.png",
+        "https://cdn.uviewui.com/uview/swiper/swiper2.png",
+        "https://cdn.uviewui.com/uview/swiper/swiper3.png",
+      ],
     };
   },
   // 监听 - 页面每次【加载时】执行(如：前进)
@@ -29,16 +41,18 @@ export default {
     // 页面数据初始化函数
     init(options) {
       // promise方式
-      uni.vk.callFunction({
-        url: "client/caricature/pub/getCaricatureList",
-        title: "请求中...",
-        data: {
-          pageIndex: 1,
-          pageSize: 10,
-        },
-      }).then((res) => {
-        this.list = res.rows;
-      });
+      uni.vk
+        .callFunction({
+          url: "client/caricature/pub/getCaricatureList",
+          title: "请求中...",
+          data: {
+            pageIndex: 1,
+            pageSize: 10,
+          },
+        })
+        .then((res) => {
+          this.list = res.rows;
+        });
     },
   },
   // 过滤器
@@ -47,7 +61,15 @@ export default {
   computed: {},
 };
 </script>
-<style lang="less" scoped>
+<style lang="less">
+.head {
+  margin-bottom: 20rpx;
+  .search {
+    padding: 10rpx;
+    margin-bottom: 40rpx;
+    background: #f2f2f2;
+  }
+}
 .list {
   padding: 30rpx;
   flex-wrap: wrap;
