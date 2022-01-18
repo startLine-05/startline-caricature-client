@@ -79,6 +79,16 @@ export default {
       uni.vk.setVuex("$user.userInfo", res.userInfo);
       uni.vk.vuex.dispatch("$user/getStoreCaricature");
       uni.$u.toast("登陆成功");
+      setTimeout(function () {
+        // 跳转到首页,或页面返回
+        var pages = getCurrentPages();
+        if (pages.length > 1) {
+          vk.navigateBack();
+        } else {
+          // 进入首页
+          vk.navigateToHome();
+        }
+      }, 1000);
     },
     codeChange(text) {
       this.tips = text;

@@ -4,7 +4,7 @@
       <view class="avatar">
         <u-avatar :src="vk.getVuex('$user.userInfo.avatar') || '/static/default.png'" size="60"></u-avatar>
       </view>
-      <view class="name">
+      <view v-if="vk.getVuex('$user.userInfo._id')" class="name">
         <view class="u-f-ac">
           <text style="margin-right: 10rpx">
             {{ vk.getVuex("$user.userInfo.nickname") || "暂无昵称" }}
@@ -16,6 +16,9 @@
           </block>
         </view>
         <view class="signature">{{ vk.getVuex("$user.userInfo.signature") || "该用户还没有签名" }}</view>
+      </view>
+      <view v-else class="name">
+        <u-tag text="登录账号" style="width: 180rpx" shape="circle" @click="toLogin"></u-tag>
       </view>
       <view class="other">
         <u-icon name="arrow-right" size="38rpx" color="#c0c4cc"></u-icon>
@@ -61,10 +64,23 @@ export default {
     };
   },
   methods: {
+    toLogin() {
+      uni.vk.navigateTo("/pages/login/index");
+    },
     handle(index) {
       const { list } = this;
       const url = list[index].url;
-      uni.vk.navigateTo(url);
+      if (url) {
+        uni.vk.navigateTo(url);
+      } else {
+        uni.vk.userCenter.logout({
+          success: function (data) {
+            // 退出成功后清楚$store的用户信息
+            uni.vk.setVuex("$user.userInfo", {});
+            uni.vk.alert("退出成功");
+          },
+        });
+      }
     },
   },
 };

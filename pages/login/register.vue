@@ -128,14 +128,7 @@ export default {
           this.isRotate = false;
           vk.toast("注册成功!");
           setTimeout(function () {
-            // 跳转到首页,或页面返回
-            var pages = getCurrentPages();
-            if (pages.length > 1) {
-              vk.navigateBack();
-            } else {
-              // 进入首页
-              vk.navigateToHome();
-            }
+            vk.navigateToHome();
           }, 1000);
         },
         complete: function () {
