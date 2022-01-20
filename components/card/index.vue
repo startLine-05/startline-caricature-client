@@ -72,6 +72,18 @@ export default {
           vk.vuex.dispatch("$user/getStarsCaricature");
         });
       } else {
+        //稍后再看
+        const userId = vk.getVuex("$user.userInfo._id");
+        const laterRead = uni.getStorageSync("laterRead") || {};
+        if (!laterRead[userId]) {
+          laterRead[userId] = [row];
+        } else {
+          const index = laterRead[userId].findIndex((v) => v._id === row._id);
+          if (index < 0) {
+            laterRead[userId].push(row);
+          }
+        }
+        uni.setStorageSync("laterRead", laterRead);
         //测试添加评论
         // vk.callFunction({
         // 	url: "client/comments/kh/addComments",
@@ -87,15 +99,15 @@ export default {
         // 	console.log(res, "s");
         // });
         //测试获取评论内容
-        vk.callFunction({
-          url: "client/comments/pub/getComments",
-          title: "请求中...",
-          data: {
-            caricature_id: row._id,
-          },
-        }).then((res) => {
-          console.log(res, "s");
-        });
+        // vk.callFunction({
+        //   url: "client/comments/pub/getComments",
+        //   title: "请求中...",
+        //   data: {
+        //     caricature_id: row._id,
+        //   },
+        // }).then((res) => {
+        //   console.log(res, "s");
+        // });
       }
     },
     //查看详情页面

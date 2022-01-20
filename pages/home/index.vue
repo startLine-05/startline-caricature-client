@@ -51,7 +51,7 @@ export default {
         {
           text: "稍后再看",
           icon: "grid-fill",
-          url: "/pagesB/collection/index",
+          url: "/pagesA/laterRead/index",
           color: "#f1a532",
         },
         {

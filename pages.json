@@ -54,6 +54,12 @@
       }
     },
     {
+      "path": "pagesA/laterRead/index",
+      "style": {
+        "navigationBarTitleText": "稍后再看"
+      }
+    },
+    {
       "path": "pages/test/test",
       "style": {
         "navigationBarTitleText": "演示页面"
