@@ -6,7 +6,7 @@
           <view v-if="!model.avatar" class="img u-f-ajc" @click="chooseImage">
             <u-icon size="50rpx" name="plus" color="#fff"></u-icon>
           </view>
-          <image v-else :src="model.avatar" mode="scaleToFill" class="img" />
+          <image v-else :src="model.avatar" mode="scaleToFill" class="img"  @click="chooseImage" />
         </u-form-item>
         <u-form-item label="昵称" prop="userInfo.nickname" borderBottom ref="item">
           <u--input v-model="model.nickname" border="none" :maxlength="10"></u--input>
@@ -93,7 +93,9 @@ export default {
           uni.$u.toast("用户信息更新成功");
           uni.vk.vuex.dispatch("$user/getCurrentUserInfo");
           console.log(res);
-        });
+        }).finally(()=>{
+          uni.hideLoading()
+        })
     },
   },
 };
