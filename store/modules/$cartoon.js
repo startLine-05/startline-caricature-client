@@ -1,6 +1,8 @@
 /**
  * vuex 漫画管理模块
  */
+let lifeData = uni.getStorageSync("lifeData") || {};
+let $cartoon = lifeData.$cartoon || {};
 export default {
   // 通过添加 namespaced: true 的方式使其成为带命名空间的模块
   namespaced: true,
@@ -9,6 +11,7 @@ export default {
    */
   state: {
     cartoonDetails: {}, //漫画详情
+    categoryList: $cartoon.categoryList || [], //分类详情
   },
   /**
    * 从基本数据(state)派生的数据，相当于state的计算属性

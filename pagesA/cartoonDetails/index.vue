@@ -10,7 +10,16 @@
     </view>
     <view class="info">
       <view class="store u-f-ajc">
-        <u-icon size="40rpx" name="star-fill" color="#fff" label="追漫" labelPos="bottom" labelSize="24rpx" labelColor="#fff" space="3rpx"></u-icon>
+        <u-icon
+          size="40rpx"
+          name="star-fill"
+          color="#fff"
+          label="追漫"
+          labelPos="bottom"
+          labelSize="24rpx"
+          labelColor="#fff"
+          space="3rpx"
+        ></u-icon>
       </view>
       <view class="name">
         {{ detailInfo.name }}
@@ -21,12 +30,14 @@
       <view class="start">
         <text>{{ detailInfo.caricature_status == "0" ? "连载中" : "已完结" }}</text>
         <text> | </text>
-        <text v-if="detailInfo.caricatureContentList"> 已更新至{{detailInfo.caricatureContentList.length}}话 </text>
+        <text v-if="detailInfo.caricatureContentList">
+          已更新至{{ detailInfo.caricatureContentList.length }}话
+        </text>
       </view>
       <view class="other">
         <text>作者：{{ detailInfo.author }}</text>
         <text> | </text>
-        <text>热血</text>
+        <text>{{ category }}</text>
       </view>
     </view>
     <view class="com"> </view>
@@ -50,13 +61,24 @@
     <u-popup :show="showList" @close="showList = false">
       <view class="popup-title u-f-ac">
         全部章节
-        <block v-if="detailInfo.caricatureContentList">({{ detailInfo.caricatureContentList.length }})</block>
+        <block v-if="detailInfo.caricatureContentList"
+          >({{ detailInfo.caricatureContentList.length }})</block
+        >
       </view>
       <view class="popup-content">
         <u-list>
-          <u-list-item v-for="(item, index) in detailInfo.caricatureContentList" :key="index">
+          <u-list-item
+            v-for="(item, index) in detailInfo.caricatureContentList"
+            :key="index"
+          >
             <view class="chapter u-f" @click="readDetail(item)">
-              <u--image :src="detailInfo.avatar" width="200rpx" height="112rpx" radius="10rpx" mode="aspectFill"></u--image>
+              <u--image
+                :src="detailInfo.avatar"
+                width="200rpx"
+                height="112rpx"
+                radius="10rpx"
+                mode="aspectFill"
+              ></u--image>
               <view class="chapter-info">
                 <view>
                   <text style="color: #303133">{{ item.current_number }} </text>
@@ -78,6 +100,7 @@ export default {
   data() {
     // 页面数据变量
     return {
+      categoryList: uni.vk.getVuex("$cartoon.categoryList") || [],
       detailInfo: {},
       showList: false,
     };
@@ -101,7 +124,7 @@ export default {
         .then((res) => {
           this.detailInfo = res.data;
           uni.vk.setVuex("$cartoon.cartoonDetails", res.data);
-          console.log(uni.vk.getVuex("lifeData"));
+          console.log("ssss", this.categoryList);
         });
     },
     readDetail(data) {
@@ -116,8 +139,15 @@ export default {
   filters: {},
   // 计算属性
   computed: {
-    caricatureContentLength() {
-      return this.detailInfo.caricatureContentList?.length;
+    category() {
+      const {
+        detailInfo: { category_id },
+        categoryList,
+      } = this;
+      console.log("categoryList");
+      const index = categoryList.findIndex((v) => v.value == category_id);
+      console.log(index, "sssss");
+      return index >= 0 ? categoryList[index].label : "";
     },
   },
 };

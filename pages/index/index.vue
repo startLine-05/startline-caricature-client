@@ -36,6 +36,7 @@ export default {
   // 监听 - 页面每次【加载时】执行(如：前进)
   onLoad(options = {}) {
     this.init(options);
+    this.getCategory();
   },
   methods: {
     // 页面数据初始化函数
@@ -52,6 +53,21 @@ export default {
         })
         .then((res) => {
           this.list = res.rows;
+        });
+    },
+    //查询分类
+    getCategory() {
+      uni.vk
+        .callFunction({
+          url: "common/pub/getCategory",
+          title: "请求中...",
+          data: {
+            pageIndex: 1,
+            pageSize: 10,
+          },
+        })
+        .then((res) => {
+          uni.vk.setVuex("$cartoon.categoryList", res.data);
         });
     },
   },
