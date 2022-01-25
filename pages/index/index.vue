@@ -5,7 +5,17 @@
         <u-search class="search" bgColor="#fff" :show-action="true" actionText="搜索" :animation="true"></u-search>
       </view>
 
-      <u-swiper :list="list1" indicator circular previousMargin="30" nextMargin="30" :autoplay="false" radius="5" bgColor="#ffffff"></u-swiper>
+      <u-swiper
+        :list="stickyList"
+        keyName="avatar"
+        indicator
+        circular
+        previousMargin="30"
+        nextMargin="30"
+        :autoplay="false"
+        radius="5"
+        bgColor="#ffffff"
+      ></u-swiper>
     </view>
 
     <view class="list u-f-ac">
@@ -26,17 +36,14 @@ export default {
     // 页面数据变量
     return {
       list: [],
-      list1: [
-        "https://cdn.uviewui.com/uview/swiper/swiper1.png",
-        "https://cdn.uviewui.com/uview/swiper/swiper2.png",
-        "https://cdn.uviewui.com/uview/swiper/swiper3.png",
-      ],
+      stickyList: [],
     };
   },
   // 监听 - 页面每次【加载时】执行(如：前进)
   onLoad(options = {}) {
     this.init(options);
     this.getCategory();
+    this.getCaricatureSticky();
   },
   methods: {
     // 页面数据初始化函数
@@ -68,6 +75,21 @@ export default {
         })
         .then((res) => {
           uni.vk.setVuex("$cartoon.categoryList", res.data);
+        });
+    },
+    //获取置顶漫画
+    getCaricatureSticky() {
+      uni.vk
+        .callFunction({
+          url: "client/caricature/pub/getCaricatureSticky",
+          title: "请求中...",
+          data: {
+            pageIndex: 1,
+            pageSize: 10,
+          },
+        })
+        .then((res) => {
+          this.stickyList = res.data;
         });
     },
   },
