@@ -83,10 +83,10 @@ export default {
         // 跳转到首页,或页面返回
         var pages = getCurrentPages();
         if (pages.length > 1) {
-          vk.navigateBack();
+          uni.vk.navigateBack();
         } else {
           // 进入首页
-          vk.navigateToHome();
+          uni.vk.navigateToHome();
         }
       }, 1000);
     },

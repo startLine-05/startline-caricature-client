@@ -9,11 +9,14 @@
         width="100%"
         height="400rpx"
       ></u--image>
-      <view class="info u-f-ac">
-        <view>
+      <view class="info">
+        <view class="u-line-1">
           {{ cardInfo.name }}
         </view>
-        <u-icon size="28" name="list-dot" @click="handle(cardInfo)"></u-icon>
+        <view class="other u-f-ac">
+          <view>{{ cardInfo.author }}</view>
+          <u-icon size="40rpx" name="list-dot" @click="handle(cardInfo)"></u-icon>
+        </view>
       </view>
     </view>
     <u-action-sheet :actions="actionList" round="5" @select="selectClick" @close="show = false" :show="show"></u-action-sheet>
@@ -121,7 +124,6 @@ export default {
 <style lang="scss" scoped>
 .card {
   width: 335rpx;
-  height: 500rpx;
   margin-bottom: 25rpx;
   border: 1rpx solid #bebebe;
   border-radius: 15rpx;
@@ -129,10 +131,15 @@ export default {
   overflow: hidden;
 }
 .info {
-  padding: 10rpx 20rpx;
-  color: #616161;
-  font-size: 26rpx;
+  padding: 10rpx 15rpx;
+  font-size: 28rpx;
   font-weight: bold;
-  justify-content: space-between;
+  .other {
+    margin-top: 10rpx;
+    font-weight: 500;
+    font-size: 24rpx;
+    color: #616161;
+    justify-content: space-between;
+  }
 }
 </style>

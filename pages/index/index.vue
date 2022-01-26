@@ -15,6 +15,7 @@
         :autoplay="false"
         radius="5"
         bgColor="#ffffff"
+        @click="toPage"
       ></u-swiper>
     </view>
 
@@ -91,6 +92,12 @@ export default {
         .then((res) => {
           this.stickyList = res.data;
         });
+    },
+    //跳转页面
+    toPage(index) {
+      const { stickyList } = this;
+      const id = stickyList[index]._id;
+      uni.vk.navigateTo(`/pagesA/cartoonDetails/index?id=${id}`);
     },
   },
   // 过滤器
