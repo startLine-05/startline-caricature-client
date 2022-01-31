@@ -16,6 +16,7 @@
         radius="5"
         bgColor="#ffffff"
         @click="toPage"
+        height="300rpx"
       ></u-swiper>
     </view>
 
@@ -109,10 +110,10 @@ export default {
 <style lang="less">
 .head {
   margin-bottom: 20rpx;
+  background: #f2f2f2;
   .search {
     padding: 10rpx;
     margin-bottom: 40rpx;
-    background: #f2f2f2;
   }
 }
 .list {

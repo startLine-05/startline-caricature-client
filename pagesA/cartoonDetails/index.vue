@@ -6,7 +6,7 @@
       </view>
     </u-navbar>
     <view class="head">
-      <u--image :src="detailInfo.avatar" width="100%" mode="aspectFill"></u--image>
+      <u--image :src="detailInfo.avatar" width="100%" height="450rpx" mode="aspectFill"></u--image>
     </view>
     <view class="info">
       <view class="store u-f-ajc">

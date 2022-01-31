@@ -1,7 +1,8 @@
 <template>
   <view>
     <block v-for="(item, index) in contentList" :key="index">
-      <u--image :src="item" width="100%" bgColor="#616161" mode="widthFix" @click="showPopup = !showPopup"> </u--image>
+      <u--image :src="item" width="100%" height="auto" bgColor="#616161" mode="widthFix" @click="showPopup = !showPopup"> </u--image>
+      <!-- <image :src="item" style="width: 100%" bgColor="#616161" mode="widthFix" @click="showPopup = !showPopup"> </image> -->
     </block>
 
     <u-popup :show="showPopup" @close="showPopup = false" mode="top" :overlay="false" bgColor="rgba(30, 30, 30, 0.7)">
