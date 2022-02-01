@@ -37,6 +37,14 @@
         </u-collapse-item>
       </u-collapse>
     </view>
+
+    <view class="comment" @click="readComment">
+      <view> 讨论区</view>
+      <u-icon label="共200条评论" name="arrow-right" labelPos="left" size="28"></u-icon>
+    </view>
+    <comment v-if="detailInfo.commentsList" :commentList="commentsList" @setLike="setLike" />
+    <!-- 占位置 -->
+    <view class="block"></view>
     <view class="tabbar u-f-ac">
       <view>
         <u-icon
@@ -81,7 +89,11 @@
 </template>
 
 <script>
+import comment from "@/components/comment/index";
 export default {
+  components: {
+    comment,
+  },
   data() {
     // 页面数据变量
     return {
@@ -109,15 +121,21 @@ export default {
         .then((res) => {
           this.detailInfo = res.data;
           uni.vk.setVuex("$cartoon.cartoonDetails", res.data);
-          console.log("ssss", res);
+          // console.log("ssss", res);
         });
     },
     readDetail(data) {
       console.log(data);
       uni.vk.navigateTo(`/pagesA/cartoonContent/index?id=${data._id}`);
     },
-    pageTo(path) {
-      vk.navigateTo(path);
+    readComment() {
+      console.log("ssssss", this.detailInfo);
+      const { _id } = this.detailInfo;
+      uni.vk.navigateTo(`/pagesA/cartoonComment/index?id=${_id}`);
+    },
+    setLike(id) {
+      const { commentsList } = this.detailInfo;
+      console.log(id, commentsList, "sssssssss");
     },
   },
   // 过滤器
@@ -131,6 +149,24 @@ export default {
       } = this;
       const index = categoryList.findIndex((v) => v.value == category_id);
       return index >= 0 ? categoryList[index].label : "";
+    },
+    commentsList() {
+      const { commentsList } = this.detailInfo;
+      if (!commentsList) {
+        return [];
+      }
+      const list = commentsList.reduce((arr, v1) => {
+        if (v1.comment_type === "0") {
+          arr.push(v1);
+        } else {
+          const index = arr.findIndex((v2) => v1.reply_comment_id === v2._id);
+          arr[index].children ? arr[index].children.push(v1) : (arr[index].children = [v1]);
+          arr[index].childrenTemporary = arr[index].children.slice(0, 2);
+        }
+        return arr;
+      }, []);
+      console.log("ggggg", list);
+      return list;
     },
   },
 };
@@ -191,6 +227,21 @@ text {
     position: relative;
     top: -90rpx;
   }
+}
+.comment {
+  position: relative;
+  top: -120rpx;
+  margin: 20rpx;
+  padding: 30rpx;
+  font-size: 30rpx;
+  font-weight: bold;
+  background: #e7e6e4;
+  display: flex;
+  justify-content: space-between;
+}
+.block {
+  width: 100%;
+  height: 120rpx;
 }
 
 .tabbar {

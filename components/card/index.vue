@@ -89,17 +89,17 @@ export default {
         uni.setStorageSync("laterRead", laterRead);
         //测试添加评论
         // vk.callFunction({
-        // 	url: "client/comments/kh/addComments",
-        // 	title: "请求中...",
-        // 	data: {
-        // 		caricature_id:row._id,
-        // 		comment_content:'测试回复能力3',
-        // 		comment_type:'1',
-        // 		reply_user_id:'61cc323e2c35190001dc3dc2',
-        // 		reply_comment_id:"61ce6095ec096d00014bf80b" // 主评论ID
-        // 	},
+        //   url: "client/comments/kh/addComments",
+        //   title: "请求中...",
+        //   data: {
+        //     caricature_id: row._id,
+        //     comment_content: `测试评论${new Date().getTime()}`,
+        //     comment_type: "0",
+        //     reply_user_id: "61e3a4ae16a4710001e824ea",
+        //     reply_comment_id: "61f7a0bd9329e70001d2b2e6", // 主评论ID
+        //   },
         // }).then((res) => {
-        // 	console.log(res, "s");
+        //   console.log(res, "s");
         // });
         //测试获取评论内容
         // vk.callFunction({

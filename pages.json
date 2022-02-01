@@ -40,6 +40,22 @@
       }
     },
     {
+      "path": "pagesA/cartoonComment/index",
+      "style": {
+        "navigationBarTitleText": "评论区"
+        // "navigationStyle": "custom", // 隐藏系统导航栏
+        // "navigationBarTextStyle": "white" // 状态栏字体为白色，只能为 white-白色，black-黑色 二选一
+      }
+    },
+    {
+      "path": "pagesA/cartoonComment/detail",
+      "style": {
+        "navigationBarTitleText": "评论详情"
+        // "navigationStyle": "custom", // 隐藏系统导航栏
+        // "navigationBarTextStyle": "white" // 状态栏字体为白色，只能为 white-白色，black-黑色 二选一
+      }
+    },
+    {
       "path": "pagesA/cartoonContent/index",
       "style": {
         "navigationBarTitleText": "漫画内容",
