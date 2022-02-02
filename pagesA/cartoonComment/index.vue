@@ -30,6 +30,7 @@ export default {
     // 页面数据变量
     return {
       list: [],
+      isEmpty: false,
       show: false,
       value: "",
       replyUser: {},
@@ -44,20 +45,27 @@ export default {
   methods: {
     // 页面数据初始化函数
     getCartoonComment() {
+      const { isEmpty } = this;
+      if (isEmpty) {
+        return;
+      }
       uni.vk
         .callFunction({
           url: "client/comments/pub/getComments",
           title: "请求中...",
           data: {
             caricature_id: id,
-            pageIndex: 1,
-            pageSize: 999,
+            pageIndex,
+            pageSize: 10,
           },
         })
         .then((res) => {
-          // pageIndex++;
-          // this.list.push(...res.rows);
-          this.list = res.rows;
+          if (res.rows.length < 10) {
+            this.isEmpty = true;
+          }
+          pageIndex++;
+          this.list.push(...res.rows);
+          // this.list = res.rows;
         });
     },
     addComment() {
@@ -92,7 +100,9 @@ export default {
       };
     },
     setLike(id) {},
-    scrolltolower() {},
+    scrolltolower() {
+      this.getCartoonComment();
+    },
   },
   // 过滤器
   filters: {},
@@ -103,17 +113,22 @@ export default {
       if (!list) {
         return [];
       }
-      const commentsList = list.reduce((arr, v1) => {
-        if (v1.comment_type === "0") {
-          arr.push(v1);
-        } else {
-          const index = arr.findIndex((v2) => v1.reply_comment_id === v2._id);
-          arr[index].children ? arr[index].children.push(v1) : (arr[index].children = [v1]);
-          arr[index].childrenTemporary = arr[index].children.slice(0, 2);
-        }
-        return arr;
-      }, []);
-      console.log("ggggg", commentsList);
+      // const commentsList = list.reduce((arr, v1) => {
+      //   if (v1.comment_type === "0") {
+      //     arr.push(v1);
+      //   } else {
+      //     const index = arr.findIndex((v2) => v1.reply_comment_id === v2._id);
+      //     arr[index].children ? arr[index].children.push(v1) : (arr[index].children = [v1]);
+      //     arr[index].childrenTemporary = arr[index].children.slice(0, 2);
+      //   }
+      //   return arr;
+      // }, []);
+      const commentsList = list.map((v) => {
+        return {
+          ...v,
+          childrenTemporary: v.children.slice(0, 2),
+        };
+      });
       return commentsList;
     },
     placeholder() {

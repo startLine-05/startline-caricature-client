@@ -27,7 +27,7 @@
                 </view>
                 <view class="text">{{ item1.comment_content }}</view>
               </view>
-              <view class="all-reply" @tap="toAllReply(item)" v-if="item.children">
+              <view class="all-reply" @tap="toAllReply(item)" v-if="item.children.length">
                 共{{ item.children.length }}条回复
                 <u-icon class="more" name="arrow-right" :size="12"></u-icon>
               </view>
