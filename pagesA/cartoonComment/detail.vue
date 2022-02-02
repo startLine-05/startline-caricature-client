@@ -1,6 +1,6 @@
 <template>
   <view>
-    <!-- <commentReply :commentDetail="commentDetail" @addReply="addReply" @setLike="setLike" @scrolltolower="scrolltolower" /> -->
+    <commentReply v-if="commentDetail._id" :commentDetail="commentDetail" @addReply="addReply" @setLike="setLike" @scrolltolower="scrolltolower" />
     <u-overlay
       :show="show"
       @click="
@@ -19,8 +19,7 @@
 
 <script>
 import commentReply from "@/components/comment/reply";
-var id; //漫画id
-
+var id; //评论id
 var pageIndex = 1;
 export default {
   components: {
@@ -37,8 +36,8 @@ export default {
   },
   // 监听 - 页面每次【加载时】执行(如：前进)
   onLoad(options = {}) {
-    this.commentDetail = uni.getStorageSync("commentDetail");
-    console.log("ssssssss", this.commentDetail);
+    id = options.id;
+    this.getCartoonComment();
   },
   // 函数
   methods: {
@@ -46,18 +45,16 @@ export default {
     getCartoonComment() {
       uni.vk
         .callFunction({
-          url: "client/comments/pub/getComments",
+          url: "client/comments/pub/getCommentDetail",
           title: "请求中...",
           data: {
-            caricature_id: id,
+            commentId: id,
             pageIndex: 1,
             pageSize: 999,
           },
         })
         .then((res) => {
-          // pageIndex++;
-          // this.list.push(...res.rows);
-          this.list = res.rows;
+          this.commentDetail = res.rows[0];
         });
     },
     addComment() {

@@ -39,6 +39,7 @@ export default {
   // 监听 - 页面每次【加载时】执行(如：前进)
   onLoad(options = {}) {
     id = options.id;
+    pageIndex = 1;
     this.getCartoonComment();
   },
   // 函数

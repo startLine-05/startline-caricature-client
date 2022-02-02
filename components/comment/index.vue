@@ -12,7 +12,7 @@
             <view class="top">
               <view class="name">{{ item.userInfo.nickname }}</view>
               <view class="like" :class="{ highlight: item.isLike }">
-                <view class="num">{{ item.like_count || 0 }}</view>
+                <view class="num">{{ item.like_count || "赞" }}</view>
                 <u-icon v-if="!item.isLike" name="thumb-up" :size="40" color="#9a9a9a" @click="getLike(item._id)"></u-icon>
                 <u-icon v-if="item.isLike" name="thumb-up-fill" :size="40" @click="getLike(item._id)"></u-icon>
               </view>
@@ -27,7 +27,7 @@
                 </view>
                 <view class="text">{{ item1.comment_content }}</view>
               </view>
-              <view class="all-reply" @tap="toAllReply(item)" v-if="item.children.length">
+              <view class="all-reply" @tap="toAllReply(item._id)" v-if="item.children.length">
                 共{{ item.children.length }}条回复
                 <u-icon class="more" name="arrow-right" :size="12"></u-icon>
               </view>
@@ -63,10 +63,9 @@ export default {
   },
   methods: {
     // 跳转到全部回复
-    toAllReply(data) {
-      uni.setStorageSync("commentDetail", data);
+    toAllReply(id) {
       uni.navigateTo({
-        url: "/pagesA/cartoonComment/detail",
+        url: `/pagesA/cartoonComment/detail?id=${id}`,
       });
     },
     //回复
