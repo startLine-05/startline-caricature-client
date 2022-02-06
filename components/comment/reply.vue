@@ -4,9 +4,8 @@
       <view class="top">
         <view class="left">
           <view class="heart-photo"><image :src="commentDetail.userInfo.avatar" mode="aspectFill"></image></view>
-          <view class="user-info">
+          <view class="user-info u-f-ac">
             <view class="name">{{ commentDetail.userInfo.nickname }}</view>
-            <view class="date">{{ commentDetail._add_time_str }}</view>
           </view>
         </view>
         <view class="right" :class="{ highlight: commentDetail.isLike }">
@@ -15,7 +14,10 @@
           <u-icon v-if="commentDetail.isLike" name="thumb-up-fill" class="like" :size="30" @click="getLike"></u-icon>
         </view>
       </view>
-      <view class="content">{{ commentDetail.comment_content }}</view>
+      <view class="bottom">
+        <view class="content">{{ commentDetail.comment_content }}</view>
+        <view class="date">{{ commentDetail._add_time_str }} </view>
+      </view>
     </view>
     <view class="all-reply">
       <view class="all-reply-top">全部回复（{{ commentDetail.children.length }}）</view>
@@ -24,9 +26,10 @@
           <view class="top">
             <view class="left">
               <view class="heart-photo"><image :src="item.userInfo.avatar" mode="aspectFill"></image></view>
-              <view class="user-info">
+              <view class="user-info u-f-ac">
                 <view class="name">{{ item.userInfo.nickname }}</view>
-                <view class="date">{{ item._add_time_str }}</view>
+                <text style="color: #999999; padding: 0 10rpx">回复</text>
+                <view class="name">{{ item.replyUserInfo.nickname }}</view>
               </view>
             </view>
             <view class="right" :class="{ highlight: item.isLike }">
@@ -35,10 +38,17 @@
               <u-icon v-if="item.isLike" name="thumb-up-fill" class="like" :size="30" @click="getLike(index)"></u-icon>
             </view>
           </view>
-          <view class="content">{{ item.comment_content }}</view>
+          <view class="bottom">
+            <view class="content">{{ item.comment_content }}</view>
+            <view class="date"
+              >{{ item._add_time_str }}
+              <text class="reply" @click="addReply(item)"> 回复 </text>
+            </view>
+          </view>
         </view>
       </view>
     </view>
+    <view class="block"></view>
   </view>
 </template>
 
@@ -53,13 +63,13 @@ export default {
     },
   },
   data() {
-    return {
-      commentList: [],
-      comment: "",
-    };
+    return {};
   },
   created() {},
   methods: {
+    addReply(data) {
+      this.$emit("addReply", data);
+    },
     // 点赞
     getLike(index) {},
   },
@@ -70,10 +80,15 @@ export default {
 page {
   background-color: #f2f2f2;
 }
+.block {
+  width: 100%;
+  height: 120rpx;
+}
 .comment {
   padding: 30rpx;
   font-size: 32rpx;
   background-color: #ffffff;
+
   .top {
     display: flex;
     justify-content: space-between;
@@ -95,10 +110,6 @@ page {
         font-size: 30rpx;
         margin-bottom: 4rpx;
       }
-      .date {
-        font-size: 26rpx;
-        color: $u-light-color;
-      }
     }
   }
   .right {
@@ -117,6 +128,19 @@ page {
   .highlight {
     color: #5677fc;
     .num {
+      color: #5677fc;
+    }
+  }
+}
+.bottom {
+  padding-left: 80rpx;
+  .date {
+    margin-top: 20rpx;
+    font-size: 26rpx;
+    color: $u-light-color;
+    .reply {
+      font-size: 26rpx;
+      margin-left: 20rpx;
       color: #5677fc;
     }
   }

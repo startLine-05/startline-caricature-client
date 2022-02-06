@@ -58,17 +58,17 @@ export default {
         });
     },
     addComment() {
-      const { value, replyUser } = this;
+      const { value, commentDetail, replyUser } = this;
       uni.vk
         .callFunction({
           url: "client/comments/kh/addComments",
-          title: "请求中...",
+          title: "",
           data: {
-            caricature_id: id,
+            caricature_id: commentDetail.caricature_id,
             comment_content: value,
-            comment_type: replyUser.reply_user_id ? "1" : "0",
-            reply_user_id: replyUser.reply_user_id, //"61e3a4ae16a4710001e824ea",
-            reply_comment_id: replyUser.reply_comment_id, //"61f7a0bd9329e70001d2b2e6", // 主评论ID
+            comment_type: "1",
+            reply_user_id: replyUser.reply_user_id || commentDetail.userInfo._id,
+            reply_comment_id: commentDetail._id, // 主评论ID
           },
         })
         .then((res) => {
@@ -85,7 +85,6 @@ export default {
       this.replyUser = {
         reply_user_id: data.user_id,
         reply_user_name: data.userInfo.nickname,
-        reply_comment_id: data._id,
       };
     },
     setLike(id) {},
