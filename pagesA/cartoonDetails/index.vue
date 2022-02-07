@@ -40,9 +40,9 @@
 
     <view class="comment" @click="readComment">
       <view> 讨论区</view>
-      <u-icon label="共200条评论" name="arrow-right" labelPos="left" size="28"></u-icon>
+      <u-icon :label="`更多精彩评论`" name="arrow-right" labelPos="left" size="28"></u-icon>
     </view>
-    <comment v-if="detailInfo.commentsList" :commentList="commentsList" @setLike="setLike" />
+    <comment v-if="detailInfo.commentsList" type="plain" :commentList="commentsList" @setLike="setLike" />
     <!-- 占位置 -->
     <view class="block"></view>
     <view class="tabbar u-f-ac">
@@ -155,17 +155,15 @@ export default {
       if (!commentsList) {
         return [];
       }
-      const list = commentsList.reduce((arr, v1) => {
-        if (v1.comment_type === "0") {
-          arr.push(v1);
-        } else {
-          const index = arr.findIndex((v2) => v1.reply_comment_id === v2._id);
-          arr[index].children ? arr[index].children.push(v1) : (arr[index].children = [v1]);
-          arr[index].childrenTemporary = arr[index].children.slice(0, 2);
-        }
-        return arr;
-      }, []);
-      console.log("ggggg", list);
+      if (!commentsList) {
+        return [];
+      }
+      const list = commentsList.map((v) => {
+        return {
+          ...v,
+          childrenTemporary: v.children.slice(0, 2),
+        };
+      });
       return list;
     },
   },
@@ -173,7 +171,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 page {
-  background: $u-bg-color;
+  // background: $u-bg-color;
   font-size: 24rpx;
   letter-spacing: 3rpx;
 }

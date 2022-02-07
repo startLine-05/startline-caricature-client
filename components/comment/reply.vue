@@ -10,8 +10,8 @@
         </view>
         <view class="right" :class="{ highlight: commentDetail.isLike }">
           {{ commentDetail.like_count || "赞" }}
-          <u-icon v-if="!commentDetail.isLike" name="thumb-up" class="like" color="#9a9a9a" :size="30" @click="getLike"></u-icon>
-          <u-icon v-if="commentDetail.isLike" name="thumb-up-fill" class="like" :size="30" @click="getLike"></u-icon>
+          <u-icon v-if="!commentDetail.isLike" name="thumb-up" class="like" color="#9a9a9a" :size="40" @click="getLike"></u-icon>
+          <u-icon v-if="commentDetail.isLike" name="thumb-up-fill" class="like" :size="40" @click="getLike"></u-icon>
         </view>
       </view>
       <view class="bottom">
@@ -28,8 +28,8 @@
               <view class="heart-photo"><image :src="item.userInfo.avatar" mode="aspectFill"></image></view>
               <view class="user-info u-f-ac">
                 <view class="name">{{ item.userInfo.nickname }}</view>
-                <text style="color: #999999; padding: 0 10rpx">回复</text>
-                <view class="name">{{ item.replyUserInfo.nickname }}</view>
+                <text v-if="item.reply_comment_id !== commentDetail._id" style="color: #999999; padding: 0 10rpx">回复</text>
+                <view v-if="item.reply_comment_id !== commentDetail._id" class="name">{{ item.replyUserInfo.nickname }}</view>
               </view>
             </view>
             <view class="right" :class="{ highlight: item.isLike }">

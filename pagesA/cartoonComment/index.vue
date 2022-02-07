@@ -1,6 +1,6 @@
 <template>
   <view>
-    <comment :commentList="commentsList" @addReply="addReply" @setLike="setLike" @scrolltolower="scrolltolower" />
+    <comment :commentList="commentsList" @addReply="addReply" @setLike="setLike" @scrolltolower="scrolltolower" @handleSort="handleSort" />
     <u-overlay
       :show="show"
       @click="
@@ -21,6 +21,7 @@
 import comment from "@/components/comment/index";
 var id; //漫画id
 var pageIndex = 1;
+var type = "1";
 export default {
   components: {
     comment,
@@ -56,6 +57,7 @@ export default {
           title: "获取评论中...",
           data: {
             caricature_id: id,
+            type,
             pageIndex,
             pageSize: 10,
           },
@@ -113,10 +115,17 @@ export default {
     },
     //重置
     reset() {
+      pageIndex = 1;
       this.isEmpty = false;
       this.value = "";
       this.show = false;
       this.replyUser = {};
+    },
+    handleSort(data) {
+      type = data;
+      this.reset();
+      this.getCartoonComment();
+      console.log("sssssss", data);
     },
     setLike(id) {},
     scrolltolower() {

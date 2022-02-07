@@ -1,9 +1,9 @@
 <template>
   <view>
     <u-list class="list" @scrolltolower="scrolltolower">
-      <view class="head">
-        <view>热门评论200</view>
-        <u-icon label="按时间" name="list" size="38"></u-icon>
+      <view class="head" v-if="type == 'complete'">
+        <view>{{ sortType == "0" ? "热门" : "最新" }}评论（{{ commentList.length }}）</view>
+        <u-icon :label="sortType == '0' ? '按热度' : '按时间'" name="list" size="38" @click="handleSort"></u-icon>
       </view>
       <u-list-item v-for="item in commentList" :key="item._id">
         <view class="comment">
@@ -34,7 +34,7 @@
             </view>
             <view class="bottom">
               {{ item._add_time_str }}
-              <view class="reply" @click="addReply(item)">回复</view>
+              <view class="reply" @click="addReply(item)" v-if="type === 'complete'">回复</view>
             </view>
           </view>
         </view>
@@ -53,10 +53,16 @@ export default {
         return [];
       },
     },
+    type: {
+      type: String,
+      default: "complete",
+    },
   },
 
   data() {
-    return {};
+    return {
+      sortType: "1",
+    };
   },
   created() {
     // this.getComment();
@@ -82,6 +88,12 @@ export default {
       //   } else {
       //     this.commentList[index].likeNum--;
       //   }
+    },
+    //排序处理
+    handleSort() {
+      const { sortType } = this;
+      this.sortType = sortType == "1" ? "0" : "1";
+      this.$emit("handleSort", sortType);
     },
     scrolltolower() {
       this.$emit("scrolltolower");
