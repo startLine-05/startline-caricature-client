@@ -20,7 +20,6 @@
 <script>
 import comment from "@/components/comment/index";
 var id; //漫画id
-
 var pageIndex = 1;
 export default {
   components: {
@@ -32,6 +31,7 @@ export default {
       list: [],
       isEmpty: false,
       show: false,
+      addReplyLoading: false,
       value: "",
       replyUser: {},
     };
@@ -53,7 +53,7 @@ export default {
       uni.vk
         .callFunction({
           url: "client/comments/pub/getComments",
-          title: "请求中...",
+          title: "获取评论中...",
           data: {
             caricature_id: id,
             pageIndex,
@@ -64,31 +64,41 @@ export default {
           if (res.rows.length < 10) {
             this.isEmpty = true;
           }
+          pageIndex == 1 ? (this.list = res.rows) : this.list.push(...res.rows);
           pageIndex++;
-          this.list.push(...res.rows);
+          this.addReplyLoading = false;
+          // this.list.push(...res.rows);
           // this.list = res.rows;
         });
     },
     addComment() {
-      const { value, replyUser } = this;
+      const { value, replyUser, addReplyLoading } = this;
+      if (!addReplyLoading) {
+        this.addReplyLoading = true;
+      } else {
+        return;
+      }
       uni.vk
         .callFunction({
           url: "client/comments/kh/addComments",
-          title: "请求中...",
+          title: "发表评论中",
           data: {
             caricature_id: id,
             comment_content: value,
             comment_type: replyUser.reply_user_id ? "1" : "0",
-            reply_user_id: replyUser.reply_user_id, //"61e3a4ae16a4710001e824ea",
-            reply_comment_id: replyUser.reply_comment_id, //"61f7a0bd9329e70001d2b2e6", // 主评论ID
+            reply_user_id: replyUser.reply_user_id, //被回复的用户ID,
+            reply_comment_id: replyUser.reply_comment_id, // 被回复评论ID
+            parent_comment_id: replyUser.parent_comment_id, // 父评论 主评论ID
           },
         })
         .then((res) => {
-          console.log(res, "s");
-          this.value = "";
-          this.show = false;
-          this.replyUser = {};
-          this.getCartoonComment();
+          setTimeout(() => {
+            pageIndex = 1;
+            this.getCartoonComment();
+          }, 100);
+        })
+        .finally(() => {
+          this.reset();
         });
     },
     addReply(data) {
@@ -98,7 +108,15 @@ export default {
         reply_user_id: data.user_id,
         reply_user_name: data.userInfo.nickname,
         reply_comment_id: data._id,
+        parent_comment_id: data._id,
       };
+    },
+    //重置
+    reset() {
+      this.isEmpty = false;
+      this.value = "";
+      this.show = false;
+      this.replyUser = {};
     },
     setLike(id) {},
     scrolltolower() {
@@ -114,16 +132,6 @@ export default {
       if (!list) {
         return [];
       }
-      // const commentsList = list.reduce((arr, v1) => {
-      //   if (v1.comment_type === "0") {
-      //     arr.push(v1);
-      //   } else {
-      //     const index = arr.findIndex((v2) => v1.reply_comment_id === v2._id);
-      //     arr[index].children ? arr[index].children.push(v1) : (arr[index].children = [v1]);
-      //     arr[index].childrenTemporary = arr[index].children.slice(0, 2);
-      //   }
-      //   return arr;
-      // }, []);
       const commentsList = list.map((v) => {
         return {
           ...v,

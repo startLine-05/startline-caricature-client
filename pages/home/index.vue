@@ -2,7 +2,7 @@
   <view>
     <view class="head u-f-ac">
       <view class="avatar">
-        <u-avatar :src="vk.getVuex('$user.userInfo.avatar') || '/static/default.png'" size="60"></u-avatar>
+        <u-avatar :src="vk.getVuex('$user.userInfo.avatar') || '/static/default.png'" size="120"></u-avatar>
       </view>
       <view v-if="vk.getVuex('$user.userInfo._id')" class="name">
         <view class="u-f-ac">
@@ -97,7 +97,7 @@ pages {
   border-radius: 15rpx;
   box-shadow: 2rpx 2rpx 10rpx #e6e6e6;
   .avatar {
-    flex: 4;
+    flex: 3;
   }
   .name {
     flex: 10;
