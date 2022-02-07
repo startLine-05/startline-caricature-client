@@ -11,10 +11,10 @@
           <view class="right">
             <view class="top">
               <view class="name">{{ item.userInfo.nickname }}</view>
-              <view class="like" :class="{ highlight: item.isLike }">
+              <view class="like">
                 <view class="num">{{ item.like_count || "赞" }}</view>
-                <u-icon v-if="!item.isLike" name="thumb-up" :size="40" color="#9a9a9a" @click="getLike(item._id)"></u-icon>
-                <u-icon v-if="item.isLike" name="thumb-up-fill" :size="40" @click="getLike(item._id)"></u-icon>
+                <u-icon v-if="!isLike(item.like_user)" name="thumb-up" :size="40" color="#9a9a9a" @click="getLike(item._id)"></u-icon>
+                <u-icon v-else name="thumb-up-fill" :size="40" @click="getLike(item._id)"></u-icon>
               </view>
             </view>
             <view class="content">{{ item.comment_content }}</view>
@@ -45,6 +45,7 @@
 </template>
 
 <script>
+var userId; //用户id
 export default {
   props: {
     commentList: {
@@ -65,9 +66,14 @@ export default {
     };
   },
   created() {
+    userId = uni.vk.getVuex("$user.userInfo._id");
     // this.getComment();
   },
   methods: {
+    isLike(list = []) {
+      console.log("sssss", userId, list, list.includes(userId));
+      return list.includes(userId);
+    },
     // 跳转到全部回复
     toAllReply(id) {
       uni.navigateTo({
@@ -79,9 +85,20 @@ export default {
       this.$emit("addReply", data);
     },
     // 点赞
-    getLike(id) {
+    getLike(id, data) {
       // this.$emit('click')
       this.$emit("setLike", id);
+      uni.vk
+        .callFunction({
+          url: "client/comments/kh/setCommentLike",
+          title: "",
+          data: {
+            comments_id: id,
+          },
+        })
+        .then((res) => {
+          console.log(res, "s");
+        });
       //   this.commentList[index].isLike = !this.commentList[index].isLike;
       //   if (this.commentList[index].isLike == true) {
       //     this.commentList[index].likeNum++;
@@ -99,6 +116,8 @@ export default {
       this.$emit("scrolltolower");
     },
   },
+  // 过滤器
+  filters: {},
 };
 </script>
 
@@ -144,12 +163,6 @@ export default {
         .num {
           margin-right: 4rpx;
           color: #9a9a9a;
-        }
-      }
-      .highlight {
-        color: #5677fc;
-        .num {
-          color: #5677fc;
         }
       }
     }
