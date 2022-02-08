@@ -18,7 +18,7 @@
         <view class="signature">{{ vk.getVuex("$user.userInfo.signature") || "该用户还没有签名" }}</view>
       </view>
       <view v-else class="name">
-        <u-tag text="登录账号" style="width: 180rpx" shape="circle" @click="toLogin"></u-tag>
+        <u-tag text="登录账号" style="width: 150rpx" shape="circle" @click="toLogin"></u-tag>
       </view>
       <view class="other">
         <u-icon name="arrow-right" size="38rpx" color="#c0c4cc"></u-icon>
@@ -27,7 +27,7 @@
 
     <view>
       <u-cell-group>
-        <block v-for="(item, index) in list" :key="index">
+        <block v-for="(item, index) in optionList" :key="index">
           <u-cell icon-size="50rpx" :icon="item.icon" :icon-style="{ color: item.color }" :title="item.text" @click="handle(index)"></u-cell>
         </block>
       </u-cell-group>
@@ -52,12 +52,6 @@ export default {
           url: "/pagesA/laterRead/index",
           color: "#f1a532",
         },
-        {
-          text: "退出登录",
-          icon: "setting-fill",
-          url: "",
-          color: "#6a6266",
-        },
       ],
     };
   },
@@ -66,8 +60,8 @@ export default {
       uni.vk.navigateTo("/pages/login/index");
     },
     handle(index) {
-      const { list } = this;
-      const url = list[index].url;
+      const { optionList } = this;
+      const url = optionList[index].url;
       if (url) {
         uni.vk.navigateTo(url);
       } else {
@@ -78,6 +72,25 @@ export default {
             uni.vk.alert("退出成功");
           },
         });
+      }
+    },
+  },
+  // 计算属性
+  computed: {
+    optionList() {
+      const { list } = this;
+      if (this.vk.getVuex("$user.userInfo._id")) {
+        return [
+          ...list,
+          {
+            text: "退出登录",
+            icon: "setting-fill",
+            url: "",
+            color: "#6a6266",
+          },
+        ];
+      } else {
+        return list;
       }
     },
   },

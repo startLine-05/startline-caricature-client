@@ -42,8 +42,8 @@ export default {
      * 注意3: 首次进入的页面暂无法检测，故不会生效。
      * 但只要页面上执行kh或sys函数，会自动判断是否登录，未登录也会自动跳登录页面，登录成功后会自动返回本来要跳转的页面。
      */
-    mode: 2,
-    list: ["/pages_template/*", "/pages/login/*", "/pages/index/*", "/pages/error/*"],
+    mode: 1,
+    list: ["/pagesA/userInfo/*", "/pagesA/laterRead/*", "/pages/index/*", "/pages/stars/index", "/pages/error/*"],
   },
   // 需要检查是否可以分享的页面列表(仅小程序有效)
   checkSharePages: {

@@ -6,6 +6,11 @@
         <card :cardInfo="item.starsDetail" />
       </block>
     </view>
+    <u-empty v-if="!vk.getVuex('$user.userInfo._id')" iconSize="120" mode="history" text="登录才能知道自己追了哪些漫画哦~" marginTop="100">
+      <view class="empty">
+        <u-tag text="前往登录" shape="circle" @click="toLogin"></u-tag>
+      </view>
+    </u-empty>
   </view>
 </template>
 
@@ -18,15 +23,20 @@ export default {
   data() {
     // 页面数据变量
     return {
-      list: uni.vk.getVuex('$user.userStars'),
+      list: uni.vk.getVuex("$user.userStars"),
     };
   },
   // 监听 - 页面每次【加载时】执行(如：前进)
   onLoad(options = {}) {
-
+    const list = uni.vk.getVuex("$user.userStars");
+    if (list.length == 0) {
+    }
   },
   methods: {
     // 页面数据初始化函数
+    toLogin() {
+      uni.vk.navigateTo("/pages/login/index");
+    },
   },
   // 过滤器
   filters: {},
@@ -39,5 +49,8 @@ export default {
   padding: 30rpx;
   flex-wrap: wrap;
   justify-content: space-between;
+}
+.empty {
+  margin-top: 50rpx;
 }
 </style>
