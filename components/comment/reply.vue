@@ -10,18 +10,22 @@
         </view>
         <view class="right" :class="{ highlight: commentDetail.isLike }">
           {{ commentDetail.like_count || "赞" }}
-          <u-icon v-if="!commentDetail.isLike" name="thumb-up" class="like" color="#9a9a9a" :size="40" @click="getLike"></u-icon>
-          <u-icon v-if="commentDetail.isLike" name="thumb-up-fill" class="like" :size="40" @click="getLike"></u-icon>
+          <u-icon
+            :name="commentDetail.isLike ? 'thumb-up-fill' : 'thumb-up'"
+            class="like"
+            :size="40"
+            @click="getLike('1', commentDetail._id, commentDetail.isLike)"
+          ></u-icon>
         </view>
       </view>
       <view class="bottom">
         <view class="content">{{ commentDetail.comment_content }}</view>
-        <view class="date">{{ commentDetail._add_time_str }} </view>
+        <view class="date">{{ commentDetail.comment_date | date("yyyy-mm-dd") }} </view>
       </view>
     </view>
     <view class="all-reply">
       <view class="all-reply-top">全部回复（{{ commentDetail.children.length }}）</view>
-      <view class="item" v-for="item in commentDetail.children" :key="item._id">
+      <view class="item" v-for="(item, index) in commentDetail.children" :key="item._id">
         <view class="comment">
           <view class="top">
             <view class="left">
@@ -34,14 +38,19 @@
             </view>
             <view class="right" :class="{ highlight: item.isLike }">
               <view class="num">{{ item.like_count || "赞" }}</view>
-              <u-icon v-if="!item.isLike" name="thumb-up" class="like" :size="30" color="#9a9a9a" @click="getLike(index)"></u-icon>
-              <u-icon v-if="item.isLike" name="thumb-up-fill" class="like" :size="30" @click="getLike(index)"></u-icon>
+              <u-icon
+                :name="item.isLike ? 'thumb-up-fill' : 'thumb-up'"
+                class="like"
+                :size="30"
+                color="#9a9a9a"
+                @click="getLike('0', item._id, item.isLike, index)"
+              ></u-icon>
             </view>
           </view>
           <view class="bottom">
             <view class="content">{{ item.comment_content }}</view>
             <view class="date"
-              >{{ item._add_time_str }}
+              >{{ item.comment_date | date("yyyy-mm-dd") }}
               <text class="reply" @click="addReply(item)"> 回复 </text>
             </view>
           </view>
@@ -71,7 +80,9 @@ export default {
       this.$emit("addReply", data);
     },
     // 点赞
-    getLike(index) {},
+    getLike(type, id, isLike, index) {
+      this.$emit("setLike", { type, id, index, isLike });
+    },
   },
 };
 </script>

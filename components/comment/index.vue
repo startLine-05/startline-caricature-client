@@ -5,7 +5,7 @@
         <view>{{ sortType == "0" ? "热门" : "最新" }}评论（{{ commentList.length }}）</view>
         <u-icon :label="sortType == '0' ? '按热度' : '按时间'" name="list" size="38" @click="handleSort"></u-icon>
       </view>
-      <u-list-item v-for="item in commentList" :key="item._id">
+      <u-list-item v-for="(item, index) in commentList" :key="item._id">
         <view class="comment">
           <view class="left"><image :src="item.userInfo.avatar" mode="aspectFill"></image></view>
           <view class="right">
@@ -13,8 +13,7 @@
               <view class="name">{{ item.userInfo.nickname }}</view>
               <view class="like">
                 <view class="num">{{ item.like_count || "赞" }}</view>
-                <u-icon v-if="!isLike(item.like_user)" name="thumb-up" :size="40" color="#9a9a9a" @click="getLike(item._id)"></u-icon>
-                <u-icon v-else name="thumb-up-fill" :size="40" @click="getLike(item._id)"></u-icon>
+                <u-icon :name="item.isLike ? 'thumb-up-fill' : 'thumb-up'" :size="40" @click="getLike(item._id, index, item.isLike)"></u-icon>
               </view>
             </view>
             <view class="content">{{ item.comment_content }}</view>
@@ -33,12 +32,13 @@
               </view>
             </view>
             <view class="bottom">
-              {{ item._add_time_str }}
+              {{ item.comment_date | date("yyyy-mm-dd") }}
               <view class="reply" @click="addReply(item)" v-if="type === 'complete'">回复</view>
             </view>
           </view>
         </view>
       </u-list-item>
+      <!-- <u-loadmore status="nomore" class="load" :height="100" /> -->
       <view class="block"></view>
     </u-list>
   </view>
@@ -62,16 +62,14 @@ export default {
 
   data() {
     return {
-      sortType: "1",
+      sortType: "0",
     };
   },
   created() {
     userId = uni.vk.getVuex("$user.userInfo._id");
-    // this.getComment();
   },
   methods: {
     isLike(list = []) {
-      console.log("sssss", userId, list, list.includes(userId));
       return list.includes(userId);
     },
     // 跳转到全部回复
@@ -85,26 +83,8 @@ export default {
       this.$emit("addReply", data);
     },
     // 点赞
-    getLike(id, data) {
-      // this.$emit('click')
-      this.$emit("setLike", id);
-      uni.vk
-        .callFunction({
-          url: "client/comments/kh/setCommentLike",
-          title: "",
-          data: {
-            comments_id: id,
-          },
-        })
-        .then((res) => {
-          console.log(res, "s");
-        });
-      //   this.commentList[index].isLike = !this.commentList[index].isLike;
-      //   if (this.commentList[index].isLike == true) {
-      //     this.commentList[index].likeNum++;
-      //   } else {
-      //     this.commentList[index].likeNum--;
-      //   }
+    getLike(id, index, isLike) {
+      this.$emit("setLike", { id, index, isLike });
     },
     //排序处理
     handleSort() {

@@ -1,6 +1,6 @@
 <template>
   <view>
-    <comment :commentList="commentsList" @addReply="addReply" @setLike="setLike" @scrolltolower="scrolltolower" @handleSort="handleSort" />
+    <comment :commentList="list" @addReply="addReply" @setLike="setLike" @scrolltolower="scrolltolower" @handleSort="handleSort" />
     <u-overlay
       :show="show"
       @click="
@@ -19,9 +19,10 @@
 
 <script>
 import comment from "@/components/comment/index";
+var userId; //用户id
 var id; //漫画id
-var pageIndex = 1;
-var type = "1";
+var pageIndex = 1; //页数
+var type = "1"; //排序类型
 export default {
   components: {
     comment,
@@ -32,6 +33,7 @@ export default {
       list: [],
       isEmpty: false,
       show: false,
+      loading: false,
       addReplyLoading: false,
       value: "",
       replyUser: {},
@@ -41,16 +43,18 @@ export default {
   onLoad(options = {}) {
     id = options.id;
     pageIndex = 1;
+    userId = uni.vk.getVuex("$user.userInfo._id");
     this.getCartoonComment();
   },
   // 函数
   methods: {
     // 页面数据初始化函数
     getCartoonComment() {
-      const { isEmpty } = this;
-      if (isEmpty) {
+      const { isEmpty, loading } = this;
+      if (isEmpty || loading) {
         return;
       }
+      this.loading = true;
       uni.vk
         .callFunction({
           url: "client/comments/pub/getComments",
@@ -63,11 +67,19 @@ export default {
           },
         })
         .then((res) => {
+          res.rows = res.rows.map((v) => {
+            return {
+              ...v,
+              childrenTemporary: v.children.slice(0, 2),
+              isLike: v.isLike || v.like_user?.includes(userId),
+            };
+          });
           if (res.rows.length < 10) {
             this.isEmpty = true;
           }
           pageIndex == 1 ? (this.list = res.rows) : this.list.push(...res.rows);
           pageIndex++;
+          this.loading = false;
           this.addReplyLoading = false;
           // this.list.push(...res.rows);
           // this.list = res.rows;
@@ -121,13 +133,38 @@ export default {
       this.show = false;
       this.replyUser = {};
     },
+    //排序
     handleSort(data) {
       type = data;
       this.reset();
       this.getCartoonComment();
-      console.log("sssssss", data);
     },
-    setLike(id) {},
+    //点赞
+    setLike(data) {
+      const { id, index, isLike } = data;
+      const { list } = this;
+
+      if (isLike) {
+        list[index].like_count--;
+        list[index].isLike = false;
+      } else {
+        list[index].like_count++;
+        list[index].isLike = true;
+      }
+
+      uni.$u.debounce(() => {
+        uni.vk
+          .callFunction({
+            url: "client/comments/kh/setCommentLike",
+            data: {
+              comments_id: id,
+              type: list[index].isLike ? "1" : "0",
+            },
+          })
+          .then((res) => {});
+      }, 1000);
+    },
+    //加载
     scrolltolower() {
       this.getCartoonComment();
     },
@@ -136,19 +173,6 @@ export default {
   filters: {},
   // 计算属性
   computed: {
-    commentsList() {
-      const { list } = this;
-      if (!list) {
-        return [];
-      }
-      const commentsList = list.map((v) => {
-        return {
-          ...v,
-          childrenTemporary: v.children.slice(0, 2),
-        };
-      });
-      return commentsList;
-    },
     placeholder() {
       const { replyUser } = this;
       if (!replyUser.reply_user_name) {

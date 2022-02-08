@@ -1,6 +1,6 @@
 <template>
   <view>
-    <commentReply v-if="commentDetail._id" :commentDetail="commentDetail" @addReply="addReply" @setLike="setLike" @scrolltolower="scrolltolower" />
+    <commentReply v-if="commentDetail._id" :commentDetail="commentDetail" @addReply="addReply" @setLike="setLike" />
     <u-overlay
       :show="show"
       @click="
@@ -20,7 +20,7 @@
 <script>
 import commentReply from "@/components/comment/reply";
 var id; //评论id
-var pageIndex = 1;
+var userId; //用户id
 export default {
   components: {
     commentReply,
@@ -38,6 +38,7 @@ export default {
   // 监听 - 页面每次【加载时】执行(如：前进)
   onLoad(options = {}) {
     id = options.id;
+    userId = uni.vk.getVuex("$user.userInfo._id");
     this.getCartoonComment();
   },
   // 函数
@@ -55,7 +56,16 @@ export default {
           },
         })
         .then((res) => {
-          this.commentDetail = res.rows[0];
+          const obj = res.rows[0];
+          obj.isLike = obj.like_user.includes(userId);
+          obj.children = obj.children.map((v) => {
+            return {
+              ...v,
+              isLike: v.like_user?.includes(userId),
+            };
+          });
+          this.commentDetail = obj;
+
           this.addReplyLoading = false;
         });
     },
@@ -96,8 +106,28 @@ export default {
         reply_comment_id: data._id,
       };
     },
-    setLike(id) {},
-    scrolltolower() {},
+    setLike(data) {
+      const { type, id, isLike, index } = data;
+      const { commentDetail } = this;
+      if (type === "1") {
+        commentDetail.isLike = !isLike;
+        commentDetail.like_count = commentDetail.like_count + (isLike ? -1 : 1);
+      } else {
+        commentDetail.children[index].isLike = !isLike;
+        commentDetail.children[index].like_count = commentDetail.children[index].like_count + (isLike ? -1 : 1);
+      }
+      uni.$u.debounce(() => {
+        uni.vk
+          .callFunction({
+            url: "client/comments/kh/setCommentLike",
+            data: {
+              comments_id: id,
+              type: !isLike ? "1" : "0",
+            },
+          })
+          .then((res) => {});
+      }, 1000);
+    },
   },
   // 过滤器
   filters: {},
