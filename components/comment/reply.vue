@@ -12,8 +12,9 @@
           {{ commentDetail.like_count || "赞" }}
           <u-icon
             :name="commentDetail.isLike ? 'thumb-up-fill' : 'thumb-up'"
+            :color="commentDetail.isLike ? '#e45656' : ''"
             class="like"
-            :size="40"
+            :size="25"
             @click="getLike('1', commentDetail._id, commentDetail.isLike)"
           ></u-icon>
         </view>
@@ -40,9 +41,9 @@
               <view class="num">{{ item.like_count || "赞" }}</view>
               <u-icon
                 :name="item.isLike ? 'thumb-up-fill' : 'thumb-up'"
+                :color="item.isLike ? '#e45656' : ''"
                 class="like"
-                :size="30"
-                color="#9a9a9a"
+                :size="25"
                 @click="getLike('0', item._id, item.isLike, index)"
               ></u-icon>
             </view>

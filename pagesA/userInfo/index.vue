@@ -1,7 +1,7 @@
 <template>
   <view>
     <view class="form">
-      <u--form labelPosition="left" :model="model" ref="form" :rules="rules" labelWidth="100">
+      <u--form labelPosition="left" :model="model" ref="form" :rules="rules">
         <u-form-item label="头像" prop="avatar" borderBottom>
           <view v-if="!model.avatar" class="img u-f-ajc" @click="chooseImage">
             <u-icon size="50rpx" name="plus" color="#fff"></u-icon>

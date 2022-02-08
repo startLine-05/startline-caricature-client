@@ -2,7 +2,7 @@
   <view>
     <view class="head u-f-ac">
       <view class="avatar">
-        <u-avatar :src="vk.getVuex('$user.userInfo.avatar') || '/static/default.png'" size="120"></u-avatar>
+        <u-avatar :src="vk.getVuex('$user.userInfo.avatar') || '/static/default.png'" size="60"></u-avatar>
       </view>
       <view v-if="vk.getVuex('$user.userInfo._id')" class="name">
         <view class="u-f-ac">
@@ -24,8 +24,6 @@
         <u-icon name="arrow-right" size="38rpx" color="#c0c4cc"></u-icon>
       </view>
     </view>
-
-    <!-- <u-gap height="10" bgColor="#ededed"></u-gap> -->
 
     <view>
       <u-cell-group>

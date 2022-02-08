@@ -6,6 +6,7 @@
         <card :cardInfo="item" />
       </block>
     </view>
+    <u-empty v-if="list.length == 0" mode="favor" marginTop="50" text="你还未添加漫画哦~"> </u-empty>
   </view>
 </template>
 

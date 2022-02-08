@@ -2,8 +2,11 @@
   <view>
     <u-list class="list" @scrolltolower="scrolltolower">
       <view class="head" v-if="type == 'complete'">
-        <view>{{ sortType == "0" ? "热门" : "最新" }}评论（{{ commentList.length }}）</view>
-        <u-icon :label="sortType == '0' ? '按热度' : '按时间'" name="list" size="38" @click="handleSort"></u-icon>
+        <view class="u-f-ac">
+          <view>{{ sortType == "0" ? "热门" : "最新" }}评论</view>
+          <view class="tag" v-if="total">{{ total }}</view>
+        </view>
+        <u-icon :label="sortType == '0' ? '按热度' : '按时间'" name="list" size="25" @click="handleSort"></u-icon>
       </view>
       <u-list-item v-for="(item, index) in commentList" :key="item._id">
         <view class="comment">
@@ -13,7 +16,12 @@
               <view class="name">{{ item.userInfo.nickname }}</view>
               <view class="like">
                 <view class="num">{{ item.like_count || "赞" }}</view>
-                <u-icon :name="item.isLike ? 'thumb-up-fill' : 'thumb-up'" :size="40" @click="getLike(item._id, index, item.isLike)"></u-icon>
+                <u-icon
+                  :name="item.isLike ? 'thumb-up-fill' : 'thumb-up'"
+                  :color="item.isLike ? '#e45656' : ''"
+                  size="25"
+                  @click="getLike(item._id, index, item.isLike)"
+                ></u-icon>
               </view>
             </view>
             <view class="content">{{ item.comment_content }}</view>
@@ -26,9 +34,9 @@
                 </view>
                 <view class="text">{{ item1.comment_content }}</view>
               </view>
-              <view class="all-reply" @tap="toAllReply(item._id)" v-if="item.children.length">
+              <view class="all-reply u-f-ac" @tap="toAllReply(item._id)" v-if="item.children.length">
                 共{{ item.children.length }}条回复
-                <u-icon class="more" name="arrow-right" :size="12"></u-icon>
+                <u-icon class="more" name="arrow-right" size="12" top="5rpx" color="#5677fc"></u-icon>
               </view>
             </view>
             <view class="bottom">
@@ -48,6 +56,9 @@
 var userId; //用户id
 export default {
   props: {
+    total: {
+      type: Number,
+    },
     commentList: {
       type: Array,
       default: () => {
@@ -107,6 +118,14 @@ export default {
   width: 100%;
   display: flex;
   justify-content: space-between;
+  .tag {
+    margin-left: 20rpx;
+    color: #5677fc;
+    font-size: 24rpx;
+    padding: 5rpx 10rpx;
+    border: 1rpx solid #5677fc;
+    border-radius: 10rpx;
+  }
 }
 .block {
   width: 100%;

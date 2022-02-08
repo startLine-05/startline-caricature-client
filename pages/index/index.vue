@@ -16,7 +16,6 @@
         radius="5"
         bgColor="#ffffff"
         @click="toPage"
-        height="300rpx"
       ></u-swiper>
     </view>
 

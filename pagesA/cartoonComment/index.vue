@@ -1,6 +1,6 @@
 <template>
   <view>
-    <comment :commentList="list" @addReply="addReply" @setLike="setLike" @scrolltolower="scrolltolower" @handleSort="handleSort" />
+    <comment :commentList="list" :total="total" @addReply="addReply" @setLike="setLike" @scrolltolower="scrolltolower" @handleSort="handleSort" />
     <u-overlay
       :show="show"
       @click="
@@ -31,6 +31,7 @@ export default {
     // 页面数据变量
     return {
       list: [],
+      total: 0,
       isEmpty: false,
       show: false,
       loading: false,
@@ -67,6 +68,7 @@ export default {
           },
         })
         .then((res) => {
+          this.total = res.total;
           res.rows = res.rows.map((v) => {
             return {
               ...v,
