@@ -192,6 +192,12 @@ export default {
       });
       return list;
     },
+    //是否收藏
+    isStars() {
+      const {
+        detailInfo: { category_id },
+      } = this;
+    },
   },
 };
 </script>
@@ -255,7 +261,7 @@ text {
 .comment {
   position: relative;
   top: -120rpx;
-  margin-bottom: -300rpx;
+  margin-bottom: -120rpx;
   .top {
     margin: 20rpx;
     padding: 30rpx;
