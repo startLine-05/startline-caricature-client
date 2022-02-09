@@ -22,11 +22,16 @@
     </view>
     <u-button class="btn" type="primary" @click="submit">提交</u-button>
     <u-action-sheet :show="showSex" :actions="actions" title="请选择性别" @close="showSex = false" @select="sexSelect" />
+    <helang-compress ref="helangCompress"></helang-compress>
   </view>
 </template>
 
 <script>
+import helangCompress from "../../components/helang-compress/helang-compress";
 export default {
+  components: {
+    helangCompress,
+  },
   data() {
     return {
       model: uni.vk.getVuex("$user.userInfo"),
@@ -80,16 +85,26 @@ export default {
     },
     submit() {
       const { avatar } = this.model;
+      //验证表单
       this.$refs.form
         .validate()
         .then(async (res) => {
-          const reg = /^blob/g;
           uni.showLoading({
             title: "保存信息中",
           });
+          //判断是否是选择图片
+          const reg = /^blob/g;
           if (reg.test(avatar)) {
+            //启用压缩
+            const data = await this.$refs.helangCompress.compress({
+              src: avatar,
+              maxSize: 150,
+              fileType: "png",
+              quality: 0.98,
+              minSize: 150,
+            });
             let res = await uni.vk.callFunctionUtil.uploadFile({
-              filePath: avatar,
+              filePath: data,
               suffix: "png", // 不传suffix会自动获取，但H5环境下获取不到后缀，但可以通过file.name 获取
               provider: "unicloud",
             });
