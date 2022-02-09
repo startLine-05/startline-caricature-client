@@ -39,10 +39,13 @@
     </view>
 
     <view class="comment" @click="readComment">
-      <view> 讨论区</view>
-      <u-icon :label="`更多精彩评论`" name="arrow-right" labelPos="left" size="28"></u-icon>
+      <view class="top">
+        <view> 讨论区</view>
+        <u-icon :label="`更多精彩评论`" name="arrow-right" labelPos="left" size="14"></u-icon>
+      </view>
+      <comment v-if="detailInfo.commentsList" type="plain" :commentList="commentsList" @setLike="setLike" />
     </view>
-    <comment v-if="detailInfo.commentsList" type="plain" :commentList="commentsList" @setLike="setLike" />
+
     <!-- 占位置 -->
     <view class="block"></view>
     <view class="tabbar u-f-ac">
@@ -229,13 +232,16 @@ text {
 .comment {
   position: relative;
   top: -120rpx;
-  margin: 20rpx;
-  padding: 30rpx;
-  font-size: 30rpx;
-  font-weight: bold;
-  background: #e7e6e4;
-  display: flex;
-  justify-content: space-between;
+  margin-bottom: -300rpx;
+  .top {
+    margin: 20rpx;
+    padding: 30rpx;
+    font-size: 30rpx;
+    font-weight: bold;
+    background: #e7e6e4;
+    display: flex;
+    justify-content: space-between;
+  }
 }
 .block {
   width: 100%;
