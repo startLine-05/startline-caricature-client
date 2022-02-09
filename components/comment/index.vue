@@ -85,9 +85,12 @@ export default {
     },
     // 跳转到全部回复
     toAllReply(id) {
-      uni.navigateTo({
-        url: `/pagesA/cartoonComment/detail?id=${id}`,
-      });
+      console.log("this");
+      if (this.type === "complete") {
+        uni.navigateTo({
+          url: `/pagesA/cartoonComment/detail?id=${id}`,
+        });
+      }
     },
     //回复
     addReply(data) {

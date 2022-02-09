@@ -113,7 +113,17 @@ export default {
   },
   // 监听 - 页面每次【加载时】执行(如：前进)
   onLoad(options = {}) {
+    console.log("s", options);
     this.getCaricatureContent(options.id);
+    //储存观看到 某 漫画的 哪一章
+    const userId = uni.vk.getVuex("$user.userInfo._id");
+    const data = uni.getStorageSync("lastReatChapter") || {};
+    data[userId] = data[userId] || {};
+    data[userId][options.cartoonId] = {
+      currentNumber: options.currentNumber,
+      currentId: options.id,
+    };
+    uni.setStorageSync("lastReatChapter", data);
   },
   // 监听 - 页面【首次渲染完成时】执行。注意如果渲染速度快，会在页面进入动画完成前触发
   onReady() {},

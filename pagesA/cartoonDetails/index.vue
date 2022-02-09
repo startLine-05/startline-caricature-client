@@ -38,18 +38,16 @@
       </u-collapse>
     </view>
 
-    <view class="comment" @click="readComment">
-      <view class="top">
+    <view class="comment">
+      <view class="top" @click="readComment">
         <view> 讨论区</view>
         <u-icon :label="`更多精彩评论`" name="arrow-right" labelPos="left" size="14"></u-icon>
       </view>
-      <comment v-if="detailInfo.commentsList" type="plain" :commentList="commentsList" @setLike="setLike" />
+      <comment v-if="detailInfo.commentsList" type="plain" :commentList="commentsList" />
     </view>
 
-    <!-- 占位置 -->
-    <view class="block"></view>
     <view class="tabbar u-f-ac">
-      <view>
+      <view class="catalogue">
         <u-icon
           size="60rpx"
           name="file-text"
@@ -62,8 +60,18 @@
           @click="showList = true"
         ></u-icon>
       </view>
-      <view></view>
+
+      <scroll-view :scroll-x="true" class="scroll-list">
+        <view class="u-f-ac">
+          <view class="scroll-block u-f-ajc" v-for="(item, index) in detailInfo.caricatureContentList" :key="index" @click="readDetail(item)">
+            {{ item.current_number }}
+          </view>
+        </view>
+      </scroll-view>
+
+      <view class="continue u-f-ajc" @click="readDetails()"> 继看 {{ currentObj.currentNumber }} 话</view>
     </view>
+
     <!--目录-->
     <u-popup :show="showList" @close="showList = false">
       <view class="popup-title u-f-ac">
@@ -93,6 +101,7 @@
 
 <script>
 import comment from "@/components/comment/index";
+var userId;
 export default {
   components: {
     comment,
@@ -103,11 +112,16 @@ export default {
       categoryList: uni.vk.getVuex("$cartoon.categoryList") || [],
       detailInfo: {},
       showList: false,
+      currentObj: {},
     };
   },
   // 监听 - 页面每次【加载时】执行(如：前进)
   onLoad(options = {}) {
     this.getCaricatureDetail(options.id);
+    userId = uni.vk.getVuex("$user.userInfo._id");
+  },
+  onShow() {
+    this.setCurrentNumbe();
   },
   // 函数
   methods: {
@@ -124,27 +138,38 @@ export default {
         .then((res) => {
           this.detailInfo = res.data;
           uni.vk.setVuex("$cartoon.cartoonDetails", res.data);
-          // console.log("ssss", res);
+          this.setCurrentNumbe();
         });
     },
+    //阅读详情
     readDetail(data) {
-      console.log(data);
-      uni.vk.navigateTo(`/pagesA/cartoonContent/index?id=${data._id}`);
+      // console.log(data);
+      uni.vk.navigateTo(`/pagesA/cartoonContent/index?id=${data._id}&cartoonId=${this.detailInfo._id}&currentNumber=${data.current_number}`);
     },
+    readDetails() {
+      const { detailInfo, currentObj } = this;
+      uni.vk.navigateTo(`/pagesA/cartoonContent/index?id=${currentObj.currentId}&cartoonId=${this.detailInfo._id}&currentNumber=${currentObj.currentNumber}`);
+    },
+    //阅读评论
     readComment() {
-      console.log("ssssss", this.detailInfo);
       const { _id } = this.detailInfo;
       uni.vk.navigateTo(`/pagesA/cartoonComment/index?id=${_id}`);
     },
-    setLike(id) {
-      const { commentsList } = this.detailInfo;
-      console.log(id, commentsList, "sssssssss");
+    setCurrentNumbe() {
+      const { _id } = this.detailInfo;
+      if (!_id) {
+        return;
+      }
+      const data = uni.getStorageSync("lastReatChapter") || {};
+      data[userId] = data[userId] || {};
+      this.currentObj = data[userId][_id] || "";
     },
   },
   // 过滤器
   filters: {},
   // 计算属性
   computed: {
+    //分类
     category() {
       const {
         detailInfo: { category_id },
@@ -153,11 +178,9 @@ export default {
       const index = categoryList.findIndex((v) => v.value == category_id);
       return index >= 0 ? categoryList[index].label : "";
     },
+    //评论
     commentsList() {
       const { commentsList } = this.detailInfo;
-      if (!commentsList) {
-        return [];
-      }
       if (!commentsList) {
         return [];
       }
@@ -243,10 +266,6 @@ text {
     justify-content: space-between;
   }
 }
-.block {
-  width: 100%;
-  height: 120rpx;
-}
 
 .tabbar {
   position: fixed;
@@ -258,6 +277,28 @@ text {
   background: #fff;
   view {
     padding: 10rpx;
+  }
+  .catalogue {
+    flex: 2;
+  }
+  .scroll-list {
+    flex: 10;
+    width: 400rpx;
+    .scroll-block {
+      width: 120rpx;
+      height: 80rpx;
+      background: #f3f2f1;
+      margin: 10rpx;
+      color: #616161;
+    }
+  }
+  .continue {
+    height: 100%;
+    font-size: 28rpx;
+    font-weight: bold;
+    flex: 4;
+    color: #fff;
+    background: #0095f8;
   }
 }
 .popup-title {
