@@ -1,5 +1,5 @@
 <template>
-  <view>
+  <view :class="show ? 'mask-show': ''">
     <commentReply v-if="commentDetail._id" :commentDetail="commentDetail" @addReply="addReply" @setLike="setLike" />
     <u-overlay
       :show="show"
@@ -145,6 +145,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.mask-show{
+  overflow: hidden;
+  position:fixed;
+  height: 100%;
+  width: 100%;
+}
 .input {
   position: fixed;
   bottom: 0;
