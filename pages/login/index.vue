@@ -37,7 +37,6 @@
 </template>
 
 <script>
-import { commonTest } from "@/utils/rules.js";
 export default {
   data() {
     return {
