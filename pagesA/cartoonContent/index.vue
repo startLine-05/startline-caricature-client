@@ -1,7 +1,7 @@
 <template>
-  <view>
+  <view :class="showList ? 'mask-show': ''">
     <block v-for="(item, index) in contentList" :key="index">
-      <u--image :src="item" width="100%" height="auto" bgColor="#616161" mode="widthFix" @click="showPopup = !showPopup"> </u--image>
+      <u--image class="img" :src="item" width="100%"   mode="widthFix" :customStyle="{height:'auto'}" @click="showPopup = !showPopup"> </u--image>
       <!-- <image :src="item" style="width: 100%" bgColor="#616161" mode="widthFix" @click="showPopup = !showPopup"> </image> -->
     </block>
 
@@ -195,8 +195,17 @@ page {
   font-size: 24rpx;
   letter-spacing: 3rpx;
 }
+.mask-show{
+  overflow: hidden;
+  position:fixed;
+  height: 100%;
+  width: 100%;
+}
 text {
   padding: 5rpx;
+}
+.img{
+  border-bottom: 2rpx solid #ccc;
 }
 .head {
   height: 120rpx;
