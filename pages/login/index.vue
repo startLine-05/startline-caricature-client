@@ -55,7 +55,14 @@ export default {
     // 登录
     async login() {
       const { email, password, code, type } = this;
-      if (!(commonTest(email, "请输入邮号") && commonTest(password, "请输入密码"))) return;
+      if (!uni.vk.pubfn.checkStr(email, "email")) {
+        uni.vk.toast("请输入正确的邮箱号码", "none");
+        return;
+      }
+      if (!password) {
+        uni.vk.toast("请输入密码", "none");
+        return;
+      }
       uni.showLoading({
         title: "登录中",
       });
