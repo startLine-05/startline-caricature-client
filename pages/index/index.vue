@@ -28,6 +28,7 @@
 </template>
 
 <script>
+var pageIndex = 1;
 import card from "@/components/card/index";
 export default {
   components: {
@@ -46,6 +47,10 @@ export default {
     this.getCategory();
     this.getCaricatureSticky();
   },
+  onPullDownRefresh() {
+    pageIndex = 1;
+    this.init();
+  },
   methods: {
     // 页面数据初始化函数
     init(options) {
@@ -53,7 +58,7 @@ export default {
       uni.vk
         .callFunction({
           url: "client/caricature/pub/getCaricatureList",
-          title: "请求中...",
+          title: "获取漫画列表...",
           data: {
             pageIndex: 1,
             pageSize: 10,
@@ -61,6 +66,9 @@ export default {
         })
         .then((res) => {
           this.list = res.rows;
+        })
+        .finally(() => {
+          uni.stopPullDownRefresh();
         });
     },
     //查询分类

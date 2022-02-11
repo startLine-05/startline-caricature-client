@@ -39,6 +39,36 @@
 - 评论
 ```
 
+## 目录
+
+```bash
+src
+└─common 公共模块
+├─components   // 组件
+│   ├─card     // 漫画卡片
+│   ├─comment  // 评论组件
+│   ├─helang-compress    // 图片压缩
+├─pages-a   // 一级页面目录
+│   ├─index // 首页
+│   ├─home  // 我的
+│   ├─login // 登录
+│   ├─stars // 追漫
+│   ├─error // 404
+│   └─other-file.cert  // plugin-a依赖的其他文件
+└─pagesA    // 二级页面目录
+│   ├─cartoonComment  //评论
+│   ├─cartoonDetails  //漫画详情
+│   ├─cartoonContent  //漫画内容页
+│   ├─laterRead       //稍后再看
+│   ├─userInfo        //用户信息编辑
+└─static                    // 静态资源
+└─store                     // vuex
+└─uni_modules               // vuex
+└─uniCloud-aliyun           // uni-cloud
+└─App.vue                   // 入口vue
+└─main                      // 入口文件
+```
+
 ## 开发
 
 > 后端内容在 admin 项目中， 在拉取本项目前请移至 [admin](https://github.com/startLine-05/startline-caricature) 项目
