@@ -180,18 +180,21 @@ export default {
     addStar() {
       const {
         detailInfo: { _id },
+        isStars,
       } = this;
+
       uni.vk
         .callFunction({
           url: "client/caricature/kh/addStarsCaricature",
           title: "请求中...",
           data: {
             caricature_id: _id,
-            option: "add",
+            option: isStars ? "remove" : "add",
           },
         })
         .then((res) => {
-          vk.vuex.dispatch("$user/getStarsCaricature");
+          uni.vk.toast(isStars ? "添加收藏成功" : "取消收藏成功", "none");
+          uni.vk.vuex.dispatch("$user/getStarsCaricature");
         });
     },
     //添加阅读数量
