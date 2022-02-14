@@ -1,16 +1,16 @@
 <template>
   <view>
     <view class="head"></view>
-    <view class="list u-f-ac">
-      <block v-for="item in list" :key="item._id">
-        <card :cardInfo="item.starsDetail" />
-      </block>
-    </view>
     <u-empty v-if="!vk.getVuex('$user.userInfo._id')" iconSize="120" mode="history" text="登录才能知道自己追了哪些漫画哦~" marginTop="100">
       <view class="empty">
         <u-tag text="前往登录" shape="circle" @click="toLogin"></u-tag>
       </view>
     </u-empty>
+    <view v-else class="list u-f-ac">
+      <block v-for="item in list" :key="item._id">
+        <card :cardInfo="item.starsDetail" />
+      </block>
+    </view>
   </view>
 </template>
 
