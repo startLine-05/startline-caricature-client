@@ -10,14 +10,24 @@
     </view>
     <view class="info">
       <view class="store u-f-ajc">
-        <u-icon size="40rpx" name="star-fill" color="#fff" label="追漫" labelPos="bottom" labelSize="24rpx" labelColor="#fff" space="3rpx"></u-icon>
+        <u-icon
+          size="40rpx"
+          :name="isStars ? 'star-fill' : 'star'"
+          color="#fff"
+          :label="isStars ? '已追' : '追漫'"
+          labelPos="bottom"
+          labelSize="24rpx"
+          labelColor="#fff"
+          space="3rpx"
+          @click="addStar"
+        ></u-icon>
       </view>
       <view class="base">
         <view class="name">
           {{ detailInfo.name }}
         </view>
         <view class="notability">
-          <text> <text style="color: #9aa089">阅读数</text> 22万 </text>
+          <text> <text style="color: #9aa089">人气</text>: {{ detailInfo.view_count * 10 }} 热力值 </text>
         </view>
         <view class="start">
           <text>{{ detailInfo.caricature_status == "0" ? "连载中" : "已完结" }}</text>
@@ -119,6 +129,7 @@ export default {
   onLoad(options = {}) {
     this.getCaricatureDetail(options.id);
     userId = uni.vk.getVuex("$user.userInfo._id");
+    this.addViewCount(options.id);
   },
   onShow() {
     this.setCurrentNumbe();
@@ -155,6 +166,7 @@ export default {
       const { _id } = this.detailInfo;
       uni.vk.navigateTo(`/pagesA/cartoonComment/index?id=${_id}`);
     },
+    //设置集数
     setCurrentNumbe() {
       const { _id } = this.detailInfo;
       if (!_id) {
@@ -163,6 +175,35 @@ export default {
       const data = uni.getStorageSync("lastReatChapter") || {};
       data[userId] = data[userId] || {};
       this.currentObj = data[userId][_id] || "";
+    },
+    //追漫
+    addStar() {
+      const {
+        detailInfo: { _id },
+      } = this;
+      uni.vk
+        .callFunction({
+          url: "client/caricature/kh/addStarsCaricature",
+          title: "请求中...",
+          data: {
+            caricature_id: _id,
+            option: "add",
+          },
+        })
+        .then((res) => {
+          vk.vuex.dispatch("$user/getStarsCaricature");
+        });
+    },
+    //添加阅读数量
+    addViewCount(id) {
+      uni.vk
+        .callFunction({
+          url: "client/caricature/kh/addViewCount",
+          data: {
+            caricature_id: id,
+          },
+        })
+        .then((res) => {});
     },
   },
   // 过滤器
@@ -195,8 +236,16 @@ export default {
     //是否收藏
     isStars() {
       const {
-        detailInfo: { category_id },
+        detailInfo: { _id },
       } = this;
+      const list = uni.vk.getVuex("$user.userStars");
+      if (list.length == 0) {
+        return false;
+      }
+      const index = list.findIndex((v) => {
+        return v.caricature_id === _id;
+      });
+      return index >= 0;
     },
   },
 };
