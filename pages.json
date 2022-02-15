@@ -38,12 +38,6 @@
         "navigationBarTitleText": "404"
       }
     }
-    // {
-    //   "path": "pages/test/test",
-    //   "style": {
-    //     "navigationBarTitleText": "演示页面"
-    //   }
-    // }
   ],
   "subPackages": [
     {
@@ -92,118 +86,6 @@
       ]
     }
   ],
-  // "subPackages": [
-  //   {
-  //     "root": "pages_template",
-  //     "pages": [
-  //       {
-  //         "path": "db-test/db-test",
-  //         "style": {
-  //           "navigationBarTitleText": "数据库API演示"
-  //         }
-  //       },
-  //       {
-  //         "path": "db-test/list/list",
-  //         "style": {
-  //           "navigationBarTitleText": "列表加载演示"
-  //         }
-  //       },
-  //       {
-  //         "path": "uni-id/index/index",
-  //         "style": {
-  //           "navigationBarTitleText": "【开箱即用】vk-uniCloud-router - 云函数路由模式 - uniCloud开发框架 - 已集成uni-id"
-  //         }
-  //       },
-  //       {
-  //         "path": "uni-id/password/password",
-  //         "style": {}
-  //       },
-  //       {
-  //         "path": "uni-id/mobile/mobile",
-  //         "style": {}
-  //       },
-  //       {
-  //         "path": "uni-id/univerify/univerify",
-  //         "style": {}
-  //       },
-  //       {
-  //         "path": "uni-id/weixin/weixin",
-  //         "style": {}
-  //       },
-  //       {
-  //         "path": "uni-id/alipay/alipay",
-  //         "style": {}
-  //       },
-  //       {
-  //         "path": "uni-id/qq/qq",
-  //         "style": {}
-  //       },
-  //       {
-  //         "path": "uni-id/util/util",
-  //         "style": {}
-  //       },
-  //       {
-  //         "path": "uni-id/email/email",
-  //         "style": {}
-  //       },
-  //       {
-  //         "path": "uni-id/login/index/index",
-  //         "style": {
-  //           "navigationBarTitleText": "登录"
-  //         }
-  //       },
-  //       {
-  //         "path": "uni-id/login/register/register",
-  //         "style": {
-  //           "navigationBarTitleText": "注册"
-  //         }
-  //       },
-  //       {
-  //         "path": "uni-id/login/forget/forget",
-  //         "style": {
-  //           "navigationBarTitleText": "找回密码"
-  //         }
-  //       },
-  //       {
-  //         "path": "vk-vuex/vk-vuex",
-  //         "style": {
-  //           "navigationBarTitleText": "vuex演示示例"
-  //         }
-  //       },
-  //       {
-  //         "path": "openapi/weixin/weixin",
-  //         "style": {}
-  //       },
-  //       {
-  //         "path": "openapi/weixin/msgSecCheck/msgSecCheck",
-  //         "style": {}
-  //       },
-  //       {
-  //         "path": "openapi/weixin/imgSecCheck/imgSecCheck",
-  //         "style": {}
-  //       },
-  //       {
-  //         "path": "openapi/weixin/sendMessage/sendMessage",
-  //         "style": {}
-  //       },
-  //       {
-  //         "path": "openapi/baidu/baidu",
-  //         "style": {}
-  //       },
-  //       {
-  //         "path": "openapi/h5-weixin/h5-weixin",
-  //         "style": {}
-  //       },
-  //       {
-  //         "path": "uni-id/test/test",
-  //         "style": {
-  //           "navigationStyle": "custom", // 隐藏系统导航栏
-  //           "navigationBarTextStyle": "white" // 状态栏字体为白色，只能为 white-白色，black-黑色 二选一
-  //         }
-  //       }
-  //     ]
-  //   }
-  // ],
   "tabBar": {
     "color": "#707070",
     "selectedColor": "#1296db",
@@ -217,7 +99,6 @@
       },
       {
         "pagePath": "pages/stars/index",
-        // "pagePath":"components/comment/index",
         "text": "我的书架",
         "iconPath": "static/tab/store.png",
         "selectedIconPath": "static/tab/store-active.png"
