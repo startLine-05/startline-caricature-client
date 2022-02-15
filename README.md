@@ -13,7 +13,7 @@
 3.  [uniCloud 是云端一体化的后端云服务](https://uniapp.dcloud.io/uniCloud/README)
 4.  [vk-uniCloud 基于 uniCloud 封装的一体化框架](https://vkdoc.fsq.pub/)
 
-### 配置敏感文本，图片验证，短信验证（请移至 管理台修改后端内容）
+### 配置敏感文本，图片验证，短信验证（请移至 管理台修改后端配置参数）
 
 1.  [内容安全](https://vkdoc.fsq.pub/client/uniCloud/plus/weixin.html#_1-2%E3%80%81%E5%86%85%E5%AE%B9%E5%AE%89%E5%85%A8)
 
@@ -90,7 +90,14 @@ npm install
 # 运行置浏览器
 ```
 
-## 在线预览
+## 预览
+
+> 请使用移动端浏览
+
+> 账号：startline_05@163.com
+> 密码：123456
+
+[在线预览](static-3ea692f6-5a08-4910-a093-a4a8fab5ac7c.bspapp.com)
 
 ## Browsers support
 

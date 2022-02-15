@@ -40,9 +40,8 @@
 export default {
   data() {
     return {
-      //13399908887 13399908889 经理13399958881 !QAZ2wsx 18933334445 startline_05@163.com
-      email: "1399848107@qq.com",
-      password: "qq430482",
+      email: "startline_05@163.com",
+      password: "123456",
       code: "",
       type: "pasd",
       passwordType: true,
