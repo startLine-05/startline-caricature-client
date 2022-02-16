@@ -3,7 +3,7 @@
     <!-- 页面内容开始 -->
     <view class="content">
       <!-- 头部logo -->
-      <view class="header"><image class="logo" src="/static/logo.png"></image></view>
+      <view class="header"><image class="logo" src="/static/dct.png"></image></view>
       <view class="form">
         <view class="group u-f-ac">
           <u-input v-model="form.email" type="text" placeholder="请输入您的邮箱" prefixIcon="account-fill" maxlength="20" shape="circle" />

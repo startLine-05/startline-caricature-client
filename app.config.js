@@ -61,7 +61,7 @@ export default {
   // 静态文件的资源URL地址
   staticUrl: {
     // Logo
-    logo: "/static/logo.png",
+    logo: "/static/dct.png",
   },
   // 自定义公共函数，myPubFunction内的函数可通过vk.myfn.xxx() 调用
   myfn: myPubFunction,

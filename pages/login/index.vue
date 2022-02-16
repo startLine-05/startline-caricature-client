@@ -1,7 +1,7 @@
 <template>
   <view>
-    <view class="log u-f-ajc">
-      <image src="@/static/logo.png" mode="widthFix"></image>
+    <view class="logo u-f-ajc">
+      <image class="img" src="@/static/dct.png" mode="widthFix"></image>
       <view>startLine-caricature</view>
     </view>
     <view class="form">
@@ -133,7 +133,7 @@ export default {
 </script>
 
 <style lang="scss">
-.log {
+.logo {
   padding: 50rpx 0;
   color: #2d6de3;
   font-size: 40rpx;
@@ -141,6 +141,7 @@ export default {
   flex-direction: column;
   image {
     width: 300rpx;
+    border-radius: 50%;
   }
 }
 .form {
