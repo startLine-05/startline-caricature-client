@@ -140,14 +140,15 @@ export default {
   // 函数
   methods: {
     back() {
-      uni.navigateBack({ delta: 1 });
+      const { cartoonDetails } = this;
+      uni.vk.navigateTo(`/pagesA/cartoonDetails/index?id=${cartoonDetails._id}`);
     },
     // 页面数据初始化函数获取漫画数据
     getCaricatureContent(id) {
       uni.vk
         .callFunction({
           url: "client/caricature/pub/getCaricatureContent",
-          title: "请求中...",
+          title: "加载中资源中...",
           data: {
             content_id: id,
           },
