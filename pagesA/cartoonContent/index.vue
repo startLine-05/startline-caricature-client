@@ -1,7 +1,11 @@
 <template>
   <view :class="showList ? 'mask-show' : ''">
     <block v-for="(item, index) in contentList" :key="index">
-      <u--image class="img" :src="item" width="100%" mode="widthFix" :customStyle="{ height: 'auto' }" @click="showPopup = !showPopup"> </u--image>
+      <u--image class="img" :src="item" width="100%" mode="widthFix" :customStyle="{ height: 'auto' }" @click="showPopup = !showPopup">
+        <template v-slot:loading>
+          {{ index + 1 }}
+        </template>
+      </u--image>
       <!-- <image :src="item" style="width: 100%" bgColor="#616161" mode="widthFix" @click="showPopup = !showPopup"> </image> -->
     </block>
 
