@@ -1,7 +1,7 @@
 <template>
-  <view :class="showList ? 'mask-show': ''">
+  <view :class="showList ? 'mask-show' : ''">
     <block v-for="(item, index) in contentList" :key="index">
-      <u--image class="img" :src="item" width="100%"   mode="widthFix" :customStyle="{height:'auto'}" @click="showPopup = !showPopup"> </u--image>
+      <u--image class="img" :src="item" width="100%" mode="widthFix" :customStyle="{ height: 'auto' }" @click="showPopup = !showPopup"> </u--image>
       <!-- <image :src="item" style="width: 100%" bgColor="#616161" mode="widthFix" @click="showPopup = !showPopup"> </image> -->
     </block>
 
@@ -70,25 +70,23 @@
         全部章节
         <block v-if="cartoonDetails.caricatureContentList">({{ cartoonDetails.caricatureContentList.length }})</block>
       </view>
-      <view class="popup-content">
-        <u-list>
-          <u-list-item v-for="(item, index) in cartoonDetails.caricatureContentList" :key="index">
-            <view class="chapter u-f" @click="choose(item, index)">
-              <u--image :src="cartoonDetails.avatar" width="250rpx" height="120rpx" radius="10rpx" mode="aspectFill"></u--image>
-              <view class="chapter-info">
-                <view :class="{ active: index == location }">
-                  <text>{{ item.current_number }} </text>
-                  <text>{{ item.current_name }} </text>
-                </view>
-                <view>{{ item.create_date | date("yyyy-mm-dd") }}</view>
+      <scroll-view :scroll-y="true" class="popup-content">
+        <block v-for="(item, index) in cartoonDetails.caricatureContentList" :key="index">
+          <view class="chapter u-f" @click="choose(item, index)">
+            <u--image :src="cartoonDetails.avatar" width="250rpx" height="120rpx" radius="10rpx" mode="aspectFill"></u--image>
+            <view class="chapter-info">
+              <view :class="{ active: index == location }">
+                <text>{{ item.current_number }} </text>
+                <text>{{ item.current_name }} </text>
               </view>
-              <view class="map" v-if="location === index">
-                <u-icon size="40rpx" color="#25aef3" name="map"></u-icon>
-              </view>
+              <view>{{ item.create_date | date("yyyy-mm-dd") }}</view>
             </view>
-          </u-list-item>
-        </u-list>
-      </view>
+            <view class="map" v-if="location === index">
+              <u-icon size="40rpx" color="#25aef3" name="map"></u-icon>
+            </view>
+          </view>
+        </block>
+      </scroll-view>
     </u-popup>
   </view>
 </template>
@@ -195,16 +193,16 @@ page {
   font-size: 24rpx;
   letter-spacing: 3rpx;
 }
-.mask-show{
+.mask-show {
   overflow: hidden;
-  position:fixed;
+  position: fixed;
   height: 100%;
   width: 100%;
 }
 text {
   padding: 5rpx;
 }
-.img{
+.img {
   border-bottom: 2rpx solid #ccc;
 }
 .head {
@@ -234,13 +232,14 @@ text {
 .popup-content {
   height: 500rpx;
   font-size: 30rpx;
+  padding-bottom: 50rpx;
   .chapter {
     padding: 10rpx 20rpx;
     position: relative;
     .map {
       position: absolute;
       right: 5%;
-      top: 25%;
+      top: 50%;
     }
     .chapter-info {
       padding: 0 20rpx;

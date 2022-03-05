@@ -1,5 +1,5 @@
 <template>
-  <view>
+  <view :class="showList ? 'mask-show' : ''">
     <u-navbar :autoBack="true" fixed :placeholder="false" bgColor="rgba(255,255,255,0)"
       ><view class="u-nav-slot" slot="left">
         <u-icon name="arrow-left" size="19"></u-icon>
@@ -88,23 +88,21 @@
         全部章节
         <block v-if="detailInfo.caricatureContentList">({{ detailInfo.caricatureContentList.length }})</block>
       </view>
-      <view class="popup-content">
-        <u-list>
-          <u-list-item v-for="(item, index) in detailInfo.caricatureContentList" :key="index">
-            <view class="chapter u-f" @click="readDetail(item)">
-              <u--image :src="detailInfo.avatar" width="200rpx" height="112rpx" radius="10rpx" mode="aspectFill"></u--image>
-              <view class="chapter-info">
-                <view>
-                  <text style="color: #303133">{{ item.current_number }} </text>
-                  <text></text>
-                  <text>{{ item.current_name }} </text>
-                </view>
-                <view>{{ item.create_date | date("yyyy-mm-dd") }}</view>
+      <scroll-view :scroll-y="true" class="popup-content">
+        <block v-for="(item, index) in detailInfo.caricatureContentList" :key="index">
+          <view class="chapter u-f" @click="readDetail(item)">
+            <u--image :src="detailInfo.avatar" width="200rpx" height="112rpx" radius="10rpx" mode="aspectFill"></u--image>
+            <view class="chapter-info">
+              <view>
+                <text style="color: #303133">{{ item.current_number }} </text>
+                <text></text>
+                <text>{{ item.current_name }} </text>
               </view>
+              <view>{{ item.create_date | date("yyyy-mm-dd") }}</view>
             </view>
-          </u-list-item>
-        </u-list>
-      </view>
+          </view>
+        </block>
+      </scroll-view>
     </u-popup>
   </view>
 </template>
@@ -259,6 +257,12 @@ page {
   font-size: 24rpx;
   letter-spacing: 3rpx;
 }
+.mask-show {
+  overflow: hidden;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+}
 text {
   padding: 5rpx;
 }
@@ -368,23 +372,16 @@ text {
 .popup-content {
   height: 500rpx;
   font-size: 30rpx;
+  padding-bottom: 50rpx;
   .chapter {
     padding: 10rpx 20rpx;
     position: relative;
-    .map {
-      position: absolute;
-      right: 5%;
-      top: 25%;
-    }
     .chapter-info {
       padding: 0 20rpx;
       color: #767a82;
       display: flex;
       justify-content: space-between;
       flex-direction: column;
-    }
-    .active {
-      color: #22afff !important;
     }
   }
 }
