@@ -6,7 +6,7 @@
       </view>
     </u-navbar>
     <view class="head">
-      <u--image :src="detailInfo.avatar" width="100%" height="450rpx" mode="aspectFill"></u--image>
+      <u--image :src="detailInfo.avatar" errorIcon="photo" width="100%" height="450rpx" mode="aspectFill"></u--image>
     </view>
     <view class="info">
       <view class="store u-f-ajc">
@@ -22,23 +22,27 @@
           @click="addStar"
         ></u-icon>
       </view>
+
       <view class="base">
-        <view class="name">
-          {{ detailInfo.name }}
-        </view>
-        <view class="notability">
-          <text> <text style="color: #9aa089">人气</text>: {{ detailInfo.view_count * 10 }} 热力值 </text>
-        </view>
-        <view class="start">
-          <text>{{ detailInfo.caricature_status == "0" ? "连载中" : "已完结" }}</text>
-          <text> | </text>
-          <text v-if="detailInfo.caricatureContentList"> 已更新至{{ detailInfo.caricatureContentList.length }}话 </text>
-        </view>
-        <view class="other">
-          <text>作者：{{ detailInfo.author }}</text>
-          <text> | </text>
-          <text>{{ category }}</text>
-        </view>
+        <u-skeleton :loading="!detailInfo._id" :animate="true" rows="4">
+          <view></view>
+          <view class="name">
+            <text>{{ detailInfo.name }}</text>
+          </view>
+          <view class="notability">
+            <text> <text style="color: #9aa089">人气</text>: {{ detailInfo.view_count * 10 }} 热力值 </text>
+          </view>
+          <view class="start">
+            <text>{{ detailInfo.caricature_status == "0" ? "连载中" : "已完结" }}</text>
+            <text> | </text>
+            <text v-if="detailInfo.caricatureContentList"> 已更新至{{ detailInfo.caricatureContentList.length }}话 </text>
+          </view>
+          <view class="other">
+            <text>作者：{{ detailInfo.author }}</text>
+            <text> | </text>
+            <text>{{ category }}</text>
+          </view>
+        </u-skeleton>
       </view>
 
       <u-collapse class="excerpt" :border="false">
