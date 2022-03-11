@@ -40,8 +40,8 @@
 export default {
   data() {
     return {
-      email: "startline_05@163.com",
-      password: "123456",
+      email: "",
+      password: "",
       code: "",
       type: "pasd",
       passwordType: true,

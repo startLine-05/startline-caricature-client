@@ -64,9 +64,9 @@ export default {
       // 表单请求数据
       form: {
         agreement: true,
-        email: "startline_05@163.com",
-        password: "qq430482",
-        password2: "qq430482",
+        email: "",
+        password: "",
+        password2: "",
         code: "",
         type: "register",
       },
