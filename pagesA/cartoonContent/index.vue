@@ -92,6 +92,7 @@
         </block>
       </scroll-view>
     </u-popup>
+    <u-notify ref="uNotify" message="已经到底拉~"></u-notify>
   </view>
 </template>
 
@@ -161,6 +162,18 @@ export default {
     loadmore() {
       const { image_list } = this.detailInfo;
       image_list.length >= 1 && this.contentList.push(image_list.shift());
+      if (image_list.length === 0) {
+        this.$refs.uNotify.show({
+          top: 10,
+          type: "primary",
+          color: "#fff",
+          bgColor: "#3c9cff",
+          message: "已经到底啦~",
+          duration: 1000 * 3,
+          fontSize: 20,
+          safeAreaInsetTop: true,
+        });
+      }
     },
     choose(data, index) {
       if (this.location === index) {
