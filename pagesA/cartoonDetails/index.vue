@@ -83,7 +83,7 @@
         </view>
       </scroll-view>
 
-      <view class="continue u-f-ajc" @click="readDetails()"> 继看 {{ currentObj.currentNumber }} 话</view>
+      <view class="continue u-f-ajc" @click="readDetails()"> 续看 {{ currentObj.currentNumber }} 话</view>
     </view>
 
     <!--目录-->
@@ -170,13 +170,16 @@ export default {
     },
     //设置集数
     setCurrentNumbe() {
-      const { _id } = this.detailInfo;
+      const { _id, caricatureContentList } = this.detailInfo;
       if (!_id) {
         return;
       }
       const data = uni.getStorageSync("lastReatChapter") || {};
       data[userId] = data[userId] || {};
-      this.currentObj = data[userId][_id] || "";
+      this.currentObj = data[userId][_id] || {
+        currentNumber: caricatureContentList[0].current_number,
+        currentId: caricatureContentList[0]._id,
+      };
     },
     //追漫
     addStar() {
