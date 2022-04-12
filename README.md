@@ -4,6 +4,17 @@
 
 > 这是一个基于最火之一的前沿技术-微服务开发的漫画网站，前后端采用阿里云的云服务技术一体化技术，包含了前端 vue+云后端 node（云数据库，云函数，云存储）
 
+## 预览
+
+> 请使用移动端浏览
+
+> 账号：startline_05@163.com
+> 密码：123456
+
+[本项目在线预览](https://static-3ea692f6-5a08-4910-a093-a4a8fab5ac7c.bspapp.com/)
+
+[若想预览管理台请移步至](https://github.com/startLine-05/startline-caricature)
+
 ## 准备前序
 
 #### 环境安装
@@ -111,15 +122,6 @@ npm install
 
 # 运行置浏览器
 ```
-
-## 预览
-
-> 请使用移动端浏览
-
-> 账号：startline_05@163.com
-> 密码：123456
-
-[在线预览](https://static-3ea692f6-5a08-4910-a093-a4a8fab5ac7c.bspapp.com/)
 
 ## Browsers support
 
